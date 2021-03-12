@@ -1,10 +1,8 @@
-/* eslint-disable no-ex-assign */
 import { APIError, InternalServerError } from '../../../errors'
-import { decoratePrototype } from '../../../utils/object'
 
-const errorHandler = method => async function(...args) {
+const errorHandlerDecorator = fn => async function(...args) {
   try {
-    return await method.apply(this, args)
+    return await fn.apply(this, args)
   } catch (error) {
     if (!(error instanceof APIError)) {
       error = new InternalServerError(`[UNHANDLED ERROR]: ${error.message}`)
@@ -22,11 +20,4 @@ const errorHandler = method => async function(...args) {
   }
 }
 
-export function Service(name) {
-  return function(Clazz) {
-    Clazz.serviceName = name
-
-    decoratePrototype(errorHandler, Clazz)
-  }
-}
-
+export default errorHandlerDecorator

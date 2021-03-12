@@ -1,9 +1,7 @@
-import { decoratePrototype } from '../../../../utils/object'
-
-const logDecorator = method => async function(...args) {
+const loggerDecorator = fn => async function(...args) {
   const start = Date.now()
 
-  const result = await method.apply(this, args)
+  const result = await fn.apply(this, args)
 
   const ms = Date.now() - start
 
@@ -20,6 +18,4 @@ const logDecorator = method => async function(...args) {
   return result
 }
 
-export function Logger(Clazz) {
-  decoratePrototype(logDecorator, Clazz)
-}
+export default loggerDecorator

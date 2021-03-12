@@ -8,11 +8,11 @@ export default class Url {
   #regExp = null
   #paramsChecker = /{([^}{]+)}/g
 
-  constructor(endpointPattern) {
-    this.endpointPatern = endpointPattern
-    this.strForRegExp = endpointPattern
+  constructor(pattern) {
+    this.pattern = pattern
+    this.strForRegExp = pattern
     this.pathParamsMap = {}
-    this.#regExp = !endpointPattern && /^$/
+    this.#regExp = !pattern && /^$/
   }
 
   getRegExp() {
@@ -20,13 +20,13 @@ export default class Url {
       return this.#regExp
     }
 
-    const pathParams = this.#paramsChecker.exec(this.endpointPatern)
+    const pathParams = this.#paramsChecker.exec(this.pattern)
 
     if (!pathParams) {
       return new RegExp(`${this.strForRegExp}(\\?|$)`)
     }
 
-    this.strForRegExp = this.strForRegExp.replace(pathParams[0], `([^\\?/]+)?`)
+    this.strForRegExp = this.strForRegExp.replace(pathParams[0], '([^\\?/]+)?')
 
     this.pathParamsMap[pathParams[1]] = null
 

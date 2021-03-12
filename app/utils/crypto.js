@@ -11,7 +11,7 @@ const ENCODING = 'hex'
 
 /**
  * @param {Buffer} buffer
- * @returns {string}
+ * @returns {String}
  */
 const toString = buffer => buffer.toString(ENCODING)
 

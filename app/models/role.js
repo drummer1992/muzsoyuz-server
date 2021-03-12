@@ -12,7 +12,7 @@ const schema = new Schema({
   imageURL: {
     type    : Schema.Types.String,
     required: true,
-  }
+  },
 }, { versionKey: false })
 
 schema.loadClass(BaseModel)

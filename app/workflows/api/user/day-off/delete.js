@@ -7,7 +7,7 @@ const deleteDayOff = async (userId, dayOffId) => {
 
   const dayOff = await DayOff.findOne({ user: userId, _id: dayOffId })
 
-  notFoundAssert(dayOff, `DayOff not found`)
+  notFoundAssert(dayOff, 'DayOff not found')
 
   return dayOff.remove()
 }

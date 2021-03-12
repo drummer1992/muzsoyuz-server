@@ -8,7 +8,7 @@ const oAuth = OAuthClient => {
 
   return {
     getLink: () => OAuthClient.getLink(),
-    signIn : code => callbackHandler(new OAuthClient(code))
+    signIn : code => callbackHandler(new OAuthClient(code)),
   }
 }
 

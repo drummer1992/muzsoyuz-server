@@ -1,4 +1,11 @@
-import Url from '../utils/url'
+import Url from '../../utils/url'
+
+/**
+ * @typedef {Object} EndpointParams
+ * @property {String} method
+ * @property {String} pattern
+ * @property {RegExp} regExp
+ */
 
 function Endpoint(method, pattern) {
   const url = new Url(pattern)
@@ -9,7 +16,8 @@ function Endpoint(method, pattern) {
     instance.constructor.ENDPOINTS.push({
       method,
       endpointName,
-      regExp: url.getRegExp()
+      regExp : url.getRegExp(),
+      Service: instance.constructor,
     })
 
     descriptor.value = function(...args) {

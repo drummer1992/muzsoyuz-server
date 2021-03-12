@@ -63,5 +63,5 @@ export const isRange = value => {
 
 export const transformRangeToQuery = range => omitBy({
   $gte: range.from,
-  $lte: range.to
+  $lte: range.to,
 })

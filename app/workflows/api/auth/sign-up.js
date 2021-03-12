@@ -11,7 +11,7 @@ const signUp = async credentials => {
     $or  : [
       { googleId: { $ne: null } },
       { facebookId: { $ne: null } },
-    ]
+    ],
   }
 
   argumentsAssert(!await User.exists(where), 'This email used by oAuth authorization system')

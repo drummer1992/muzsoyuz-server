@@ -10,7 +10,6 @@ const resolveFilter = filter => {
   const limit = filter.limit || 30
   const offset = filter.offset || 0
 
-
   Object.keys(where).forEach(key => {
     if (isRange(where[key])) {
       where[key] = transformRangeToQuery(where[key])

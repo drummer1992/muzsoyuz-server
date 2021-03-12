@@ -9,7 +9,7 @@ const schema = new Schema({
   date  : {
     type    : Schema.Types.Date,
     required: true,
-  }
+  },
 }, { versionKey: false })
 
 schema.loadClass(BaseModel)

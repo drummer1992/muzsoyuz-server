@@ -9,16 +9,14 @@ import { StatusCode as c } from '../constants/http'
 import { StatusCode } from './context/decorators/status-code'
 import { ValidationPipe } from '../errors/validation/decorator'
 import { CreateOfferSchema, FindOffersSchema, UpdateOfferSchema } from '../workflows/api/user/offers/schema'
+import { CreateDayOffSchema } from '../workflows/api/user/day-off/schema'
 import { UpdateUserSchema } from '../workflows/api/user/profile/schema'
 import findOffers from '../workflows/api/user/offers/find'
 import deleteOffer from '../workflows/api/user/offers/delete'
-import { Logger } from './context/decorators/logger'
 import createDayOff from '../workflows/api/user/day-off/create'
-import { CreateDayOffSchema } from '../workflows/api/user/day-off/schema'
 import deleteDayOff from '../workflows/api/user/day-off/delete'
 import getDaysOff from '../workflows/api/user/day-off/get'
 
-@Logger
 @Service('/user')
 class UserService extends Context {
   @Get()

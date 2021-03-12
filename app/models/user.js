@@ -10,11 +10,11 @@ const schema = new Schema({
   },
   yearCommercialExp: {
     type   : Schema.Types.Number,
-    default: 0
+    default: 0,
   },
   countOfJobs      : {
     type   : Schema.Types.Number,
-    default: 0
+    default: 0,
   },
   phone            : {
     type     : Schema.Types.String,
@@ -30,7 +30,7 @@ const schema = new Schema({
     index    : {
       unique                 : true,
       partialFilterExpression: { facebookId: { $type: 'string' } },
-    }
+    },
   },
   googleId         : {
     type     : Schema.Types.String,
@@ -38,7 +38,7 @@ const schema = new Schema({
     index    : {
       unique                 : true,
       partialFilterExpression: { googleId: { $type: 'string' } },
-    }
+    },
   },
   gender           : {
     type   : Schema.Types.String,
@@ -54,7 +54,7 @@ const schema = new Schema({
     index    : {
       unique                 : true,
       partialFilterExpression: { email: { $type: 'string' } },
-    }
+    },
   },
   imageURL         : {
     type: Schema.Types.String,

@@ -8,9 +8,7 @@ import { StatusCode as c } from '../constants/http'
 import { StatusCode } from './context/decorators/status-code'
 import { ValidationPipe } from '../errors/validation/decorator'
 import { AuthSchema } from '../workflows/api/auth/schema'
-import { Logger } from './context/decorators/logger'
 
-@Logger
 @Service('/auth')
 class AuthService extends Context {
   @Post('/signUp')

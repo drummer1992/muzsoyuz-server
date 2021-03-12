@@ -1,4 +1,4 @@
-import assert from "assert"
+import assert from 'assert'
 
 const updateProfile = async (userId, changes) => {
   assert(userId, 'userId is required')

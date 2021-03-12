@@ -42,7 +42,7 @@ export const CreateOfferSchema = {
   salary : and([required, number]),
   sets   : and([required, oneOf(SETS)]),
   jobType: and([required, oneOf(JOB_TYPES)]),
-  role   : and([required, oneOf(ROLES)])
+  role   : and([required, oneOf(ROLES)]),
 }
 
 export const UpdateOfferSchema = {
@@ -56,8 +56,8 @@ export const FindOffersSchema = {
     jobType : or([oneOf(JOB_TYPES), array.of(oneOf(JOB_TYPES))],
       'jobType should be valid jobType or array of jobTypes'),
     sets    : and([number, oneOf(SETS)]),
-    salary  : object.range,
-    date    : object.range,
+    salary  : object.softRange,
+    date    : object.softRange,
     isActive: boolean,
   }),
   limit  : number,

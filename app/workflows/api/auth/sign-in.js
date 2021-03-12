@@ -8,7 +8,7 @@ const props = [
   'hash',
   'salt',
   'googleId',
-  'facebookId'
+  'facebookId',
 ]
 
 const signIn = async credentials => {

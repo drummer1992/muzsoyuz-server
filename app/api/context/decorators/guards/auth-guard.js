@@ -10,7 +10,7 @@ export function AuthGuard(instance, endpointName, descriptor) {
 
     this.setCurrentUser(_id)
 
-    return endpoint.call(this, ...args)
+    return endpoint.apply(this, args)
   }
 
   return descriptor

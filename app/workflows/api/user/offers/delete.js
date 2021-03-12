@@ -1,5 +1,5 @@
 import { notFoundAssert } from '../../../../errors'
-import assert from "assert"
+import assert from 'assert'
 
 const deleteOffer = async (userId, offerId) => {
   assert(userId, 'userId is required')
@@ -7,7 +7,7 @@ const deleteOffer = async (userId, offerId) => {
 
   const offer = await Offer.findOne({ user: userId, _id: offerId })
 
-  notFoundAssert(offer, `Offer not found`)
+  notFoundAssert(offer, 'Offer not found')
 
   return offer.remove()
 }

@@ -115,10 +115,24 @@ object.schema = schema => optional((object, objectName) => {
   })
 })
 
-object.range = and([object, object.schema({
-  from: and([required, number]),
-  to  : and([required, number]),
-})])
+object.range = and([
+  object,
+  object.notEmpty,
+  object.schema({
+    from: and([required, number]),
+    to  : and([required, number]),
+  }),
+])
+
+object.softRange = and([
+  object,
+  object.notEmpty,
+  object.schema({ from: number, to: number }),
+  or([
+    object.schema({ from: required }),
+    object.schema({ to: required }),
+  ]),
+])
 
 array.of = (validator, message) => and([
   array,
@@ -181,5 +195,3 @@ export const validate = (schema, options) => payload => {
 }
 
 export default Validator
-
-

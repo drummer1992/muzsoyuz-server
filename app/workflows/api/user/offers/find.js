@@ -1,6 +1,6 @@
 import resolveFilter from '../../../user/resolve-filter'
 
-const findOffers = (filter) => {
+const findOffers = filter => {
   const query = resolveFilter(filter)
 
   return Offer.find(query.where)

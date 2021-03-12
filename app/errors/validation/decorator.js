@@ -6,10 +6,10 @@ export function ValidationPipe(schema, options = {}) {
   return function(target, key, descriptor) {
     const method = descriptor.value
 
-    descriptor.value = function(body) {
-      validateBody(body)
+    descriptor.value = function(...args) {
+      validateBody(...args)
 
-      return method.call(this, body)
+      return method.apply(this, args)
     }
 
     return descriptor

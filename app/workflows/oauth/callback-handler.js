@@ -15,7 +15,7 @@ const callbackHandler = async oauthClient => {
     $or: [
       { [idName]: profile[idName] },
       { email: profile.email },
-    ]
+    ],
   })
 
   if (!user) {

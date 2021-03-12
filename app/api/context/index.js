@@ -1,28 +1,40 @@
-import { NotFoundError } from '../../errors'
+import { notFoundAssert } from '../../errors'
 import { StatusCode as c } from '../../constants/http'
+import { ErrorHandler } from './decorators/endpoint/error-handler'
+import { parseBody } from '../../utils/http/body-parser'
+import { Logger } from './decorators/endpoint/logger'
 
-const getCurrentEndpointName = (endpoints, method, url, servicePrefix) => {
-  let endpointName = 'notFound'
+/**
+ *
+ * @param {String} url
+ * @param {String} method
+ * @param {Context} Service
+ * @returns {String}
+ */
+const getEndpointName = (url, method, Service) => {
+  const { serviceRegExp, ENDPOINTS } = Service
 
-  if (url.startsWith(servicePrefix)) {
-    const path = url.replace(servicePrefix, '')
+  const path = url.replace(serviceRegExp, '')
 
-    const endpoint = endpoints.find(endpoint => (
-      endpoint.method === method
-      && endpoint.regExp.test(path)
-    ))
+  const endpoint = ENDPOINTS.find(endpoint => {
+    const sameMethod = endpoint.method === method
+    const sameService = endpoint.Service === Service
+    const regexpIsMatched = endpoint.regExp.test(path)
 
-    endpointName = endpoint ? endpoint.endpointName : endpointName
-  }
+    return sameMethod && sameService && regexpIsMatched
+  })
 
-  return endpointName
+  return endpoint?.endpointName
 }
 
 export default class Context {
-  #req
-  #res
-
-  static serviceName = null
+  /**
+   * @type {RegExp}
+   */
+  static serviceRegExp = null
+  /**
+   * @type {EndpointParams[]}
+   */
   static ENDPOINTS = []
 
   /**
@@ -30,23 +42,12 @@ export default class Context {
    * @param {ServerResponse} res
    */
   constructor(req, res) {
-    const { ENDPOINTS } = this.constructor
-
+    this._req = req
+    this._res = res
     /**
-     *
      * @type {User}
      */
     this.user = null
-    this.#req = req
-    this.#res = res
-
-    this.endpointName = getCurrentEndpointName(
-      ENDPOINTS,
-      req.method,
-      req.url,
-      this.constructor.serviceName,
-    )
-
     this.request = {
       url        : req.url,
       method     : req.method,
@@ -56,6 +57,10 @@ export default class Context {
     }
 
     this.response = { statusCode: c.OK }
+  }
+
+  static isProperlyService(url) {
+    return new RegExp(this.serviceRegExp.source + '([^\\w]|$)').test(url)
   }
 
   getUserToken() {
@@ -80,9 +85,17 @@ export default class Context {
     this.response.statusCode = code
   }
 
-  notFound() {
-    this.setStatusCode(c.NOT_FOUND)
+  @Logger
+  @ErrorHandler
+  async execute() {
+    const endpointName = getEndpointName(
+      this._req.url,
+      this._req.method,
+      this.constructor,
+    )
 
-    return new NotFoundError('Service Method Not Found')
+    notFoundAssert(endpointName, 'Service Method Not Found')
+
+    return this[endpointName](await parseBody(this._req))
   }
 }

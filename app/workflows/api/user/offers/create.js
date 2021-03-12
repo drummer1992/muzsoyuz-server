@@ -1,4 +1,4 @@
-import assert from "assert"
+import assert from 'assert'
 
 const createOffer = (userId, payload) => {
   assert(userId, 'userId is required')

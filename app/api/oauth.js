@@ -2,9 +2,7 @@ import Context from './context'
 import { Service } from './context/decorators/service'
 import { Get } from './context/decorators/endpoint'
 import oAuth from '../workflows/api/oauth'
-import { Logger } from './context/decorators/logger'
 
-@Logger
 @Service('/oauth')
 class OAuthService extends Context {
   @Get('/link/google')
