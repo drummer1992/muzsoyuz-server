@@ -11,7 +11,7 @@ const loggerDecorator = fn => async function(...args) {
   if (result instanceof Error) {
     logger = console.error
 
-    const body = args.length ? `\n${JSON.stringify(...args, null, 2)}` : ''
+    const body = `\nBODY: ${JSON.stringify(this.request.body, null, 2)}`
 
     errorMessage = ` ${result.name}: ${result.message}${body}`
   }

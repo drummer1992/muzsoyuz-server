@@ -54,6 +54,7 @@ export default class Context {
       headers    : { ...req.headers },
       pathParams : {},
       queryParams: {},
+      body       : {},
     }
 
     this.response = { statusCode: c.OK }
@@ -96,6 +97,8 @@ export default class Context {
 
     notFoundAssert(endpointName, 'Service Method Not Found')
 
-    return this[endpointName](await parseBody(this._req))
+    this.request.body = await parseBody(this._req)
+
+    return this[endpointName](this.request.body)
   }
 }
