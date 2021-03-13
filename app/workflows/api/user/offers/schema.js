@@ -18,6 +18,7 @@ const AVAILABLE_PROPS = [
   'role',
   'sets',
   'title',
+  'created',
 ]
 
 const AVAILABLE_SORT_VALUES = ['ASC', 'DESC'].map(direction => (

@@ -4,7 +4,7 @@ const resolveFilter = filter => {
   const resolvedFilter = filter || {}
   const where = resolvedFilter.where || {}
 
-  const [attr = 'created', direction = 'DESC'] = (filter.orderBy || '').split(' ')
+  const [attr, direction] = (filter.orderBy || 'created DESC').split(' ')
 
   const orderBy = `${direction === 'DESC' ? '-' : '+'}${attr}`
   const limit = filter.limit || 30
