@@ -13,7 +13,15 @@ const loggerDecorator = fn => async function(...args) {
     errorMessage = ` ${result.name}: ${result.message}`
   }
 
-  logger(`[${this.response.statusCode}] '${this.request.method} ${this.request.url}'${errorMessage} ${ms} ms`)
+  const date = new Date().toLocaleDateString('en-us', {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  })
+
+  logger(`[${date}] [${this.response.statusCode}] '${this.request.method} ${this.request.url}'${errorMessage} ${ms} ms`)
 
   return result
 }
