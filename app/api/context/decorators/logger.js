@@ -15,7 +15,11 @@ const loggerDecorator = fn => async function(...args) {
   }
 
   const time = new Date().toLocaleTimeString()
-  const body = `\n${JSON.stringify(this.request.body, null, 2)}`
+
+  const body =  Object.keys(this.request.body || {}).length
+    ? `\n${JSON.stringify(this.request.body, null, 2)}`
+    : ''
+
   const endpoint = `[${this.response.statusCode}] '${this.request.method} ${this.request.url}'`
 
   logger(`[${time}] ${endpoint}${errorMessage} ${ms} ms${body}`)
