@@ -11,14 +11,14 @@ const loggerDecorator = fn => async function(...args) {
   if (result instanceof Error) {
     logger = console.error
 
-    const body = `\nBODY: ${JSON.stringify(this.request.body, null, 2)}`
-
-    errorMessage = ` ${result.name}: ${result.message}${body}`
+    errorMessage = ` ${result.name}: ${result.message}`
   }
 
   const time = new Date().toLocaleTimeString()
+  const body = `\n${JSON.stringify(this.request.body, null, 2)}`
+  const endpoint = `[${this.response.statusCode}] '${this.request.method} ${this.request.url}'`
 
-  logger(`[${time}] [${this.response.statusCode}] '${this.request.method} ${this.request.url}'${errorMessage} ${ms} ms`)
+  logger(`[${time}] ${endpoint}${errorMessage} ${ms} ms${body}`)
 
   return result
 }
