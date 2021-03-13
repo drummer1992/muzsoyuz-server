@@ -10,7 +10,10 @@ const loggerDecorator = fn => async function(...args) {
 
   if (result instanceof Error) {
     logger = console.error
-    errorMessage = ` ${result.name}: ${result.message}\n${JSON.stringify(args, null, 2)}`
+
+    const body = args.length ? `\n${JSON.stringify(...args, null, 2)}` : ''
+
+    errorMessage = ` ${result.name}: ${result.message}${body}`
   }
 
   const time = new Date().toLocaleTimeString()
