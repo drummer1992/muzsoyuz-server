@@ -1,6 +1,5 @@
 const TABLES = [
   Reaction,
-  Role,
   Offer,
   User,
   DayOff,
