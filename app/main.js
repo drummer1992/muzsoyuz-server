@@ -35,7 +35,7 @@ const main = async (req, res) => {
 
   res.setHeader('Access-Control-Allow-Origin', '*')
   res.setHeader('Content-Type', 'application/json; charset=utf-8')
-  res.setHeader('Content-Length', serializedResponse.length)
+  res.setHeader('Content-Length', Buffer.byteLength(serializedResponse))
   res.writeHead(statusCode)
   res.end(serializedResponse)
 }
