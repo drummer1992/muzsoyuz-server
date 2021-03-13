@@ -44,6 +44,7 @@ export const CreateOfferSchema = {
   sets   : and([required, oneOf(SETS)]),
   jobType: and([required, oneOf(JOB_TYPES)]),
   role   : and([required, oneOf(ROLES)]),
+  title  : and([required, string, string.maxLength(100)]),
 }
 
 export const UpdateOfferSchema = {

@@ -51,8 +51,8 @@ class UserService extends Context {
 
   @Post('/offers/find')
   @ValidationPipe(FindOffersSchema, { required: false })
-  findOffers(filter) {
-    return findOffers(filter)
+  findOffers(query) {
+    return findOffers(query)
   }
 
   @Delete('/offers/{offerId}')

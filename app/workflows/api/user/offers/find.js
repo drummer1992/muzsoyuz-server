@@ -1,12 +1,12 @@
-import resolveFilter from '../../../user/resolve-filter'
+import resolveQuery from '../../../user/resolve-query'
 
-const findOffers = filter => {
-  const query = resolveFilter(filter)
+const findOffers = query => {
+  const resolvedQuery = resolveQuery(query)
 
-  return Offer.find(query.where)
-    .sort(query.orderBy)
-    .limit(query.limit)
-    .skip(query.offset)
+  return Offer.find(resolvedQuery.where, resolvedQuery.props)
+    .sort(resolvedQuery.orderBy)
+    .limit(resolvedQuery.limit)
+    .skip(resolvedQuery.offset)
 }
 
 export default findOffers

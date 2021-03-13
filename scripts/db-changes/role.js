@@ -1,5 +1,5 @@
-import { Role as r } from '../../constants/user'
-import { keyBy } from '../../utils/object'
+import { Role as r } from '../../app/constants/user'
+import { keyBy } from '../../app/utils/object'
 
 const data = [
   {

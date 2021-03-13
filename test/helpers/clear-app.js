@@ -3,9 +3,10 @@ const TABLES = [
   Role,
   Offer,
   User,
+  DayOff,
 ]
 
-module.exports = async () => {
+export const clearApp = async () => {
   for (const Table of TABLES) {
     await Table.deleteMany({})
   }

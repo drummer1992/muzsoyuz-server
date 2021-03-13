@@ -1,7 +1,10 @@
 {
   "extends": "eslint:recommended",
   "root": true,
-  "ignorePatterns": ["**/*.hbs.js", "**/*.ts"],
+  "ignorePatterns": [
+    "**/*.hbs.js",
+    "**/*.ts"
+  ],
   "env": {
     "es6": true,
     "node": true
@@ -16,7 +19,13 @@
     "DayOff": true,
     "Offer": true,
     "Reaction": true,
-    "Role": true
+    "Role": true,
+    "assert": true,
+    "describe": true,
+    "it":  true,
+    "before": true,
+    "after":  true,
+    "faker": true
   },
   "rules": {
     "dot-notation": "error",
@@ -88,15 +97,21 @@
       "never"
     ],
     "require-atomic-updates": "off",
-    "no-mixed-operators": ["error", {
-      "groups": [
-        [
-          "&&",
-          "?:"
+    "no-mixed-operators": [
+      "error",
+      {
+        "groups": [
+          [
+            "&&",
+            "?:"
+          ]
         ]
-      ]
-    }],
-    "operator-linebreak": ["error", "before"],
+      }
+    ],
+    "operator-linebreak": [
+      "error",
+      "before"
+    ],
     "quote-props": [
       "warn",
       "as-needed"

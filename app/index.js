@@ -1,12 +1,12 @@
 import { ENV } from './config'
 import main from './main'
-import initDb from './db/init'
-import runScripts from './scripts'
+import * as db from './db'
+import runScripts from '../scripts'
 
 const onListen = () => console.log(`---Node.js Server started on port ${ENV.PORT}---`)
 
 async function init() {
-  await initDb()
+  await db.init()
   await runScripts()
 
   const httpClient = require(ENV.PROTOCOL)

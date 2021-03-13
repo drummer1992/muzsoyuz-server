@@ -1,5 +1,4 @@
 const SCRIPTS = [
-  // require('./clear-app'),
   require('./role'),
 ]
 
