@@ -16,8 +16,8 @@ const serialize = response => p.isUndefined(response) ? '' : JSON.stringify(resp
  * @returns {Promise<void>}
  */
 const main = async (req, res) => {
-  let response = new NotFoundError('Service Not Found')
-  let statusCode = c.NOT_FOUND
+  let response
+  let statusCode
 
   const Service = services.find(Service => Service.isProperlyService(req.url))
 
@@ -26,6 +26,9 @@ const main = async (req, res) => {
 
     response = await service.execute()
     statusCode = service.response.statusCode
+  } else {
+    response = new NotFoundError('Service Not Found')
+    statusCode = c.NOT_FOUND
   }
 
   const serializedResponse = serialize(response)
