@@ -7,6 +7,7 @@ const findOffers = query => {
     .sort(resolvedQuery.orderBy)
     .limit(resolvedQuery.limit)
     .skip(resolvedQuery.offset)
+    .populate('user')
 }
 
 export default findOffers
