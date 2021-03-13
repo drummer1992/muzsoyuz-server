@@ -7,6 +7,7 @@ const VARIABLES = [
   'PORT',
   'HOSTNAME',
   'PROTOCOL',
+  'API_PREFIX',
   'MODE',
   'MONGO_URL',
   'MONGO_DB_NAME',
