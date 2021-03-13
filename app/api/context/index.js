@@ -89,8 +89,8 @@ export default class Context {
   @ErrorHandler
   async execute() {
     const endpointName = getEndpointName(
-      this._req.url,
-      this._req.method,
+      this.request.url,
+      this.request.method,
       this.constructor,
     )
 
