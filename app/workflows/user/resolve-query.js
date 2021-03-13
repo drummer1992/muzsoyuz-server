@@ -1,9 +1,9 @@
 import { isRange, transformRangeToQuery } from '../../utils/object'
 
 const resolveQuery = query => {
-  const resolvedFilter = query || {}
-  const where = resolvedFilter.where || {}
-  const props = query.props || []
+  const resolvedQuery = { ...(query || {}) }
+  const where = { ...(resolvedQuery.where || {}) }
+  const props = [...(resolvedQuery.props || [])]
 
   const [attr, direction] = (query.orderBy || 'created DESC').split(' ')
 
