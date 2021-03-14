@@ -7,8 +7,8 @@ const availableEntities = [
   'body',
 ]
 
-export function ValidationPipe(schema, options) {
-  const { context = 'body' } = options || {}
+export function ValidationPipe(schema, options = {}) {
+  const context = options?.context || 'body'
 
   assert(availableEntities.includes(context), `Entity [${context}] is not supported`)
 
