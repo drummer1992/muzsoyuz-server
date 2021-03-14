@@ -1,6 +1,8 @@
 import url from 'url'
 import querystring from 'querystring'
 import { isObject } from '../object'
+import http from 'http'
+import https from 'https'
 
 const Method = {
   get   : 'GET',
@@ -32,15 +34,15 @@ function request(params) {
   return new Promise((resolve, reject) => {
     const u = url.parse(path)
 
-    const https = u.protocol === 'https:'
+    const secure = u.protocol === 'https:'
 
-    const httpClient = require(https ? 'https' : 'http')
+    const httpClient = secure ? https : http
 
     const options = {
       method,
       host: u.hostname,
       path: u.path,
-      port: u.port || (https ? 443 : 80),
+      port: u.port || (secure ? 443 : 80),
     }
 
     const onResponse = response => {

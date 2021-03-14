@@ -1,6 +1,6 @@
 import { verify } from '../../../../utils/http/jwt'
 
-export function AuthGuard(instance, endpointName, descriptor) {
+export function AuthGuard(instance, serviceMethod, descriptor) {
   const endpoint = descriptor.value
 
   descriptor.value = function(...args) {

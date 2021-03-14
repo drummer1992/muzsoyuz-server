@@ -1,41 +1,34 @@
+import Context from './api/context'
 import { NotFoundError } from './errors'
 import { StatusCode as c } from './constants/http'
-import fs from 'fs'
-import { predicates as p } from './utils/object'
-import { withCors } from './utils/http/with-cors'
-
-const services = fs.readdirSync('./app/api')
-  .filter(item => item.includes('.js'))
-  .map(module => require(`./api/${module}`))
-
-const serialize = response => p.isUndefined(response) ? '' : JSON.stringify(response)
 
 /**
- *
  * @param {IncomingMessage} req
  * @param {ServerResponse} res
  * @returns {Promise<void>}
  */
-const main = withCors(async (req, res) => {
+const main = async (req, res) => {
   let response
   let statusCode
+  let headers
 
-  const Service = services.find(Service => Service.isProperlyService(req.url))
+  const context = new Context(req, res)
+
+  const Service = context.getCurrentService()
 
   if (Service) {
     const service = new Service(req, res)
 
     response = await service.execute()
     statusCode = service.response.statusCode
+    headers = service.response.headers
   } else {
-    response = new NotFoundError('Service Not Found')
+    response = new NotFoundError('Service not found')
     statusCode = c.NOT_FOUND
   }
 
-  const serializedResponse = serialize(response)
-
-  res.writeHead(statusCode)
-  res.end(serializedResponse)
-})
+  res.writeHead(statusCode, headers)
+  res.end(response && JSON.stringify(response))
+}
 
 export default main

@@ -1,5 +1,5 @@
 export function StatusCode(code) {
-  return function(instance, endpointName, descriptor) {
+  return function(instance, serviceMethod, descriptor) {
     const endpoint = descriptor.value
 
     descriptor.value = async function(...args) {

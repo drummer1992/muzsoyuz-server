@@ -3,51 +3,18 @@ import { StatusCode as c } from '../../constants/http'
 import { ErrorHandler } from './decorators/endpoint/error-handler'
 import { parseBody } from '../../utils/http/body-parser'
 import { Logger } from './decorators/endpoint/logger'
-
-/**
- *
- * @param {String} url
- * @param {String} method
- * @param {Context} Service
- * @returns {String}
- */
-const getEndpointName = (url, method, Service) => {
-  const { serviceRegExp, ENDPOINTS } = Service
-
-  const path = url.replace(serviceRegExp, '')
-
-  const endpoint = ENDPOINTS.find(endpoint => {
-    const sameMethod = endpoint.method === method
-    const sameService = endpoint.Service === Service
-    const regexpIsMatched = endpoint.regExp.test(path)
-
-    return sameMethod && sameService && regexpIsMatched
-  })
-
-  return endpoint?.endpointName
-}
+import { Cors } from './decorators/cors'
 
 export default class Context {
-  /**
-   * @type {RegExp}
-   */
-  static serviceRegExp = null
-  /**
-   * @type {EndpointParams[]}
-   */
-  static ENDPOINTS = []
-
-  /**
-   * @param {IncomingMessage} req
-   * @param {ServerResponse} res
-   */
   constructor(req, res) {
-    this._req = req
-    this._res = res
+    this.req = req
+    this.res = res
+
     /**
      * @type {User}
      */
     this.user = null
+
     this.request = {
       url        : req.url,
       method     : req.method,
@@ -57,8 +24,21 @@ export default class Context {
       body       : {},
     }
 
-    this.response = { statusCode: c.OK }
+    this.response = {
+      statusCode: c.OK,
+      headers   : {},
+    }
   }
+
+  /**
+   * @type {RegExp}
+   */
+  static serviceRegExp
+
+  /**
+   * @type {Endpoint[]}
+   */
+  static ENDPOINTS = []
 
   static isProperlyService(url) {
     return new RegExp(this.serviceRegExp.source + '([^\\w]|$)').test(url)
@@ -86,19 +66,48 @@ export default class Context {
     this.response.statusCode = code
   }
 
+  setHeaders(headers) {
+    this.response.headers = {
+      ...this.response.headers,
+      ...headers,
+    }
+  }
+
+  getCurrentService() {
+    const { ENDPOINTS } = this.constructor
+
+    const endpoint = ENDPOINTS.find(({ Service }) => {
+      return Service.isProperlyService(this.request.url)
+    })
+
+    return endpoint?.Service
+  }
+
+  getServiceMethod() {
+    const { ENDPOINTS } = this.constructor
+
+    const path = this.request.url.replace(this.constructor.serviceRegExp, '')
+
+    const endpoint = ENDPOINTS.find(endpoint => {
+      const sameMethod = endpoint.method === this.request.method
+      const regexpIsMatched = endpoint.regExp.test(path)
+
+      return sameMethod && regexpIsMatched
+    })
+
+    return endpoint?.serviceMethod
+  }
+
+  @Cors({ enable: true })
   @Logger
   @ErrorHandler
   async execute() {
-    const endpointName = getEndpointName(
-      this.request.url,
-      this.request.method,
-      this.constructor,
-    )
+    const serviceMethod = this.getServiceMethod()
 
-    notFoundAssert(endpointName, 'Service Method Not Found')
+    notFoundAssert(serviceMethod, 'Service Method Not Found')
 
-    this.request.body = await parseBody(this._req)
+    const body = await parseBody(this.req)
 
-    return this[endpointName](this.request.body)
+    return this[serviceMethod](body)
   }
 }

@@ -1,4 +1,5 @@
 yarn.lock
 .env
+.env.test
 sandbox.js
 node_modules

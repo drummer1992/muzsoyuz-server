@@ -1,21 +1,22 @@
 import Url from '../../utils/url'
 
 /**
- * @typedef {Object} EndpointParams
+ * @typedef {Object} Endpoint
  * @property {String} method
- * @property {String} pattern
+ * @property {String} serviceMethod
  * @property {RegExp} regExp
+ * @property {Context} Service
  */
 
 function Endpoint(method, pattern) {
   const url = new Url(pattern)
 
-  return function(instance, endpointName, descriptor) {
+  return function(instance, serviceMethod, descriptor) {
     const endpoint = descriptor.value
 
     instance.constructor.ENDPOINTS.push({
       method,
-      endpointName,
+      serviceMethod,
       regExp : url.getRegExp(),
       Service: instance.constructor,
     })

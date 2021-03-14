@@ -4,19 +4,21 @@ import http from 'http'
 import assert from 'assert'
 import main from '../../app/main'
 import { ENV } from '../../app/config'
+import bootstrap from '../../app/bootstrap'
 
 const isLocalTest = () => /localhost/.test(ENV.TEST_URL)
 
-const startServer = main => new Promise(resolve => http.createServer(main)
-  .listen(ENV.PORT, resolve))
+const startServer = () => new Promise(resolve => {
+  http.createServer(main).listen(ENV.PORT, resolve)
+})
 
 before(async () => {
   assert(ENV.TEST_URL, 'TEST_URL is not filled')
 
-  await db.init()
+  await bootstrap()
 
   if (isLocalTest()) {
-    await startServer(main)
+    await startServer()
 
     console.log('---Server started---')
   }

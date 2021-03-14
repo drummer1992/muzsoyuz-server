@@ -10,4 +10,4 @@ class MetaService extends Context {
   }
 }
 
-module.exports = MetaService
+export default MetaService

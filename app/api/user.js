@@ -88,4 +88,4 @@ class UserService extends Context {
   }
 }
 
-module.exports = UserService
+export default UserService

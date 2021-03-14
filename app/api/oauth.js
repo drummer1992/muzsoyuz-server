@@ -26,4 +26,4 @@ class OAuthService extends Context {
   }
 }
 
-module.exports = OAuthService
+export default OAuthService

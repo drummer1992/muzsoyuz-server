@@ -39,7 +39,7 @@ const data = [
   },
 ]
 
-module.exports = async () => {
+const roleScript = async () => {
   const roleByName = await Role.find().then(roles => keyBy(roles, 'name'))
 
   const dataToCreate = []
@@ -56,3 +56,5 @@ module.exports = async () => {
     console.log('Inserted:', JSON.stringify(dataToCreate, null, 2))
   }
 }
+
+export default roleScript

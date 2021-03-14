@@ -31,4 +31,4 @@ class AuthService extends Context {
   }
 }
 
-module.exports = AuthService
+export default AuthService

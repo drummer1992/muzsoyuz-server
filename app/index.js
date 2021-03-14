@@ -1,17 +1,14 @@
+import http from 'http'
 import { ENV } from './config'
 import main from './main'
-import * as db from './db'
-import runScripts from '../scripts'
+import bootstrap from './bootstrap'
 
-const onListen = () => console.log(`---Node.js Server started on port ${ENV.PORT}---`)
+const onStart = () => console.log(`---Node.js Server started on port ${ENV.PORT}---`)
 
 async function init() {
-  await db.init()
-  await runScripts()
+  await bootstrap()
 
-  const httpClient = require(ENV.PROTOCOL)
-
-  httpClient.createServer(main).listen(ENV.PORT, onListen)
+  http.createServer(main).listen(ENV.PORT, onStart)
 }
 
 init().catch(e => {

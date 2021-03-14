@@ -4,7 +4,7 @@ import { Request } from '../../utils/http/request'
 import { pick } from '../../utils/object'
 import { ENV } from '../../config'
 
-function OAuthErrorHandler(instance, endpointName, descriptor) {
+function OAuthErrorHandler(instance, serviceMethod, descriptor) {
   const method = descriptor.value
 
   descriptor.value = async function(...args) {

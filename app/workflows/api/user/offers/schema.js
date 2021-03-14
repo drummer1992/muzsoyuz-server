@@ -51,12 +51,12 @@ export const UpdateOfferSchema = {
   ...DefaultOfferSchema,
 }
 
+const valueOrArrayOfValues = (values, message) => or([oneOf(values), array.of(oneOf(values))], message)
+
 export const FindOffersSchema = {
   where  : object.schema({
-    role    : or([oneOf(ROLES), array.of(oneOf(ROLES))],
-      'role should be valid role or array of roles'),
-    jobType : or([oneOf(JOB_TYPES), array.of(oneOf(JOB_TYPES))],
-      'jobType should be valid jobType or array of jobTypes'),
+    role    : valueOrArrayOfValues(ROLES, 'role should be valid role or array of roles'),
+    jobType : valueOrArrayOfValues(JOB_TYPES, 'jobType should be valid jobType or array of jobTypes'),
     sets    : and([number, oneOf(SETS)]),
     salary  : object.softRange,
     date    : object.softRange,
