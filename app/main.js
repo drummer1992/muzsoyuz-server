@@ -12,14 +12,13 @@ const main = async (req, res) => {
   let statusCode
   let headers
 
-  const context = new Context(req, res)
-
-  const Service = context.getCurrentService()
+  const Service = Context.getCurrentService(req.url)
 
   if (Service) {
     const service = new Service(req, res)
 
     response = await service.execute()
+    
     statusCode = service.response.statusCode
     headers = service.response.headers
   } else {

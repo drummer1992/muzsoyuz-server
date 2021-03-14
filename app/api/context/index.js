@@ -73,12 +73,10 @@ export default class Context {
     }
   }
 
-  getCurrentService() {
-    const { ENDPOINTS } = this.constructor
+  static getCurrentService(url) {
+    const { ENDPOINTS } = this
 
-    const endpoint = ENDPOINTS.find(({ Service }) => {
-      return Service.isProperlyService(this.request.url)
-    })
+    const endpoint = ENDPOINTS.find(({ Service }) => Service.isProperlyService(url))
 
     return endpoint?.Service
   }
