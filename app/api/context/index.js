@@ -104,8 +104,8 @@ export default class Context {
 
     notFoundAssert(serviceMethod, 'Service Method Not Found')
 
-    const body = await parseBody(this.req)
+    this.request.body = await parseBody(this.req)
 
-    return this[serviceMethod](body)
+    return this[serviceMethod](this.request.body)
   }
 }

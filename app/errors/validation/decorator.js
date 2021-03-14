@@ -1,13 +1,24 @@
+import assert from 'assert'
 import { validate } from './index'
 
-export function ValidationPipe(schema, options = {}) {
-  const validateBody = validate(schema, options)
+const availableEntities = [
+  'pathParams',
+  'queryParams',
+  'body',
+]
+
+export function ValidationPipe(schema, options) {
+  const { context = 'body' } = options || {}
+
+  assert(availableEntities.includes(context), `Entity [${context}] is not supported`)
+
+  const validateEntity = validate(schema, options)
 
   return function(target, key, descriptor) {
     const method = descriptor.value
 
     descriptor.value = function(...args) {
-      validateBody(...args)
+      validateEntity(this.request[context])
 
       return method.apply(this, args)
     }

@@ -9,7 +9,7 @@ import { StatusCode as c } from '../constants/http'
 import { StatusCode } from './context/decorators/status-code'
 import { ValidationPipe } from '../errors/validation/decorator'
 import { CreateOfferSchema, FindOffersSchema, UpdateOfferSchema } from '../workflows/api/user/offers/schema'
-import { CreateDayOffSchema } from '../workflows/api/user/day-off/schema'
+import { CreateDayOffSchema, DeleteDayOffSchema } from '../workflows/api/user/day-off/schema'
 import { UpdateUserSchema } from '../workflows/api/user/profile/schema'
 import findOffers from '../workflows/api/user/offers/find'
 import deleteOffer from '../workflows/api/user/offers/delete'
@@ -18,7 +18,7 @@ import deleteDayOff from '../workflows/api/user/day-off/delete'
 import getDaysOff from '../workflows/api/user/day-off/get'
 
 @Service('/user')
-class UserService extends Context {
+export default class UserService extends Context {
   @Get()
   @AuthGuard
   getProfile() {
@@ -80,6 +80,7 @@ class UserService extends Context {
 
   @Delete('/daysOff/{dayOffId}')
   @AuthGuard
+  @ValidationPipe(DeleteDayOffSchema, { context: 'pathParams' })
   @StatusCode(c.NO_CONTENT)
   deleteDayOff() {
     const { dayOffId } = this.request.pathParams
@@ -87,5 +88,3 @@ class UserService extends Context {
     return deleteDayOff(this.getCurrentUserId(), dayOffId)
   }
 }
-
-export default UserService

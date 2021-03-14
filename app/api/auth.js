@@ -10,7 +10,7 @@ import { ValidationPipe } from '../errors/validation/decorator'
 import { AuthSchema } from '../workflows/api/auth/schema'
 
 @Service('/auth')
-class AuthService extends Context {
+export default class AuthService extends Context {
   @Post('/signUp')
   @ValidationPipe(AuthSchema)
   @StatusCode(c.CREATED)
@@ -30,5 +30,3 @@ class AuthService extends Context {
     return this.getCurrentUser()
   }
 }
-
-export default AuthService

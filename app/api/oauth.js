@@ -2,12 +2,15 @@ import Context from './context'
 import { Service } from './context/decorators/service'
 import { Get } from './context/decorators/endpoint'
 import oAuth from '../workflows/api/oauth'
+import { StatusCode as c } from '../constants/http'
+import { StatusCode } from './context/decorators/status-code'
 
 @Service('/oauth')
-class OAuthService extends Context {
+export default class OAuthService extends Context {
   @Get('/link/google')
+  @StatusCode(c.FOUND)
   getGoogleLink() {
-    return oAuth.google.getLink()
+    this.setHeaders({ Location: oAuth.google.getLink() })
   }
 
   @Get('/callback/google')
@@ -16,8 +19,9 @@ class OAuthService extends Context {
   }
 
   @Get('/link/facebook')
+  @StatusCode(c.FOUND)
   getFacebookLink() {
-    return oAuth.facebook.getLink()
+    this.setHeaders({ Location: oAuth.facebook.getLink() })
   }
 
   @Get('/callback/facebook')
@@ -25,5 +29,3 @@ class OAuthService extends Context {
     return oAuth.facebook.signIn(this.request.queryParams.code)
   }
 }
-
-export default OAuthService
