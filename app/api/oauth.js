@@ -7,24 +7,24 @@ import { StatusCode } from './context/decorators/status-code'
 
 @Service('/oauth')
 export default class OAuthService extends Context {
-  @Get('/link/google')
+  @Get('/google/link')
   @StatusCode(c.FOUND)
   getGoogleLink() {
     this.setHeaders({ Location: oAuth.google.getLink() })
   }
 
-  @Get('/callback/google')
+  @Get('/google/callback')
   googleCallback() {
     return oAuth.google.signIn(this.request.queryParams.code)
   }
 
-  @Get('/link/facebook')
+  @Get('/facebook/link')
   @StatusCode(c.FOUND)
   getFacebookLink() {
     this.setHeaders({ Location: oAuth.facebook.getLink() })
   }
 
-  @Get('/callback/facebook')
+  @Get('/facebook/callback')
   facebookCallback() {
     return oAuth.facebook.signIn(this.request.queryParams.code)
   }
