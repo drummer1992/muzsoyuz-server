@@ -5,7 +5,7 @@ const resolveQuery = query => {
   const where = { ...(resolvedQuery.where || {}) }
   const props = [...(resolvedQuery.props || [])]
 
-  const [attr, direction] = (query.orderBy || 'created DESC').split(' ')
+  const [attr, direction] = (query.orderBy || 'createdAt DESC').split(' ')
 
   const orderBy = `${direction === 'DESC' ? '-' : '+'}${attr}`
   const limit = query.limit || 30
