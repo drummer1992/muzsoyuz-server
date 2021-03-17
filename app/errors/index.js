@@ -45,7 +45,7 @@ export class UnauthorizedError extends APIError {
     super()
 
     this.message = message
-    this.statusCode = c.FORBIDDEN
+    this.statusCode = c.UNAUTHORIZED
     this.name = UnauthorizedError.name
   }
 }
