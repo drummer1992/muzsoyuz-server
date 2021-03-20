@@ -8,7 +8,7 @@ const resolveQuery = query => {
 
   const [attr, direction] = (clonedQuery.orderBy || 'createdAt DESC').split(' ')
 
-  const orderBy = `${direction === 'DESC' ? '-' : '+'}${attr}`
+  const orderBy = `${direction === 'DESC' ? '-' : ''}${attr}`
   const limit = clonedQuery.limit || 30
   const offset = clonedQuery.offset || 0
 
