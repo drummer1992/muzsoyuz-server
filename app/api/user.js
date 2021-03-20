@@ -16,6 +16,7 @@ import deleteOffer from '../workflows/api/user/offers/delete'
 import createDayOff from '../workflows/api/user/day-off/create'
 import deleteDayOff from '../workflows/api/user/day-off/delete'
 import getDaysOff from '../workflows/api/user/day-off/get'
+import { UploadPipe } from './context/decorators/endpoint/upload'
 
 @Service('/user')
 export default class UserService extends Context {
@@ -30,6 +31,13 @@ export default class UserService extends Context {
   @BodyValidationPipe(UpdateUserSchema)
   updateProfile() {
     return updateProfile(this.getCurrentUserId(), this.request.body)
+  }
+
+  @Post({ parseBody: false, path: '/uploadImage/{fileName}' })
+  @AuthGuard
+  @UploadPipe()
+  uploadImage({ fileURL }) {
+    return fileURL
   }
 
   @Post('/offers')

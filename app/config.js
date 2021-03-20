@@ -9,7 +9,6 @@ dotenv.config({ path: path.resolve(__dirname, '../', envFile) })
 
 const VARIABLES = [
   'PORT',
-  'HOSTNAME',
   'PROTOCOL',
   'API_PREFIX',
   'MODE',
@@ -25,6 +24,9 @@ const VARIABLES = [
   'FACEBOOK_REDIRECT_URI',
   'JWT_EXPIRES_IN',
   'JWT_AUTH_SECRET',
+  'PATH_TO_STATIC',
+  'STATIC_FOLDER',
+  'STATIC_SERVER',
 ]
 
 for (const variable of VARIABLES) {

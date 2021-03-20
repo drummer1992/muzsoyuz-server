@@ -1,5 +1,11 @@
 import Url from '../../utils/url'
 import { addEndpoint } from '../../protected'
+import { parseBody } from '../../../../utils/http/body-parser'
+import { isObject } from '../../../../utils/object'
+
+const resolveOptions = pathOrOptions => isObject(pathOrOptions)
+  ? pathOrOptions
+  : { path: pathOrOptions, parseBody: true }
 
 /**
  * @typedef {Object} Endpoint
@@ -8,8 +14,10 @@ import { addEndpoint } from '../../protected'
  * @property {RegExp} regExp
  */
 
-function Endpoint(method, pattern) {
-  const url = new Url(pattern)
+function Endpoint(method, pathOrOptions) {
+  const options = resolveOptions(pathOrOptions)
+
+  const url = new Url(options.path)
 
   return function(instance, serviceMethod, descriptor) {
     const endpoint = descriptor.value
@@ -20,12 +28,16 @@ function Endpoint(method, pattern) {
       regExp: url.getRegExp(),
     })
 
-    descriptor.value = function(data) {
+    descriptor.value = async function() {
       this.request.pathParams = url.parsePathParams(this.request.url)
       this.request.queryParams = url.parseQueryParams(this.request.url)
 
+      if (options.parseBody) {
+        this.request.body = await parseBody(this._req)
+      }
+
       return endpoint.call(this, {
-        ...data,
+        body       : this.request.body,
         pathParams : this.request.pathParams,
         queryParams: this.request.queryParams,
       })
@@ -35,22 +47,22 @@ function Endpoint(method, pattern) {
   }
 }
 
-export function Get(path) {
-  return Endpoint('GET', path)
+export function Get(pathOrOptions) {
+  return Endpoint('GET', pathOrOptions)
 }
 
-export function Post(path) {
-  return Endpoint('POST', path)
+export function Post(pathOrOptions) {
+  return Endpoint('POST', pathOrOptions)
 }
 
-export function Patch(path) {
-  return Endpoint('PATCH', path)
+export function Patch(pathOrOptions) {
+  return Endpoint('PATCH', pathOrOptions)
 }
 
-export function Put(path) {
-  return Endpoint('PUT', path)
+export function Put(pathOrOptions) {
+  return Endpoint('PUT', pathOrOptions)
 }
 
-export function Delete(path) {
-  return Endpoint('DELETE', path)
+export function Delete(pathOrOptions) {
+  return Endpoint('DELETE', pathOrOptions)
 }

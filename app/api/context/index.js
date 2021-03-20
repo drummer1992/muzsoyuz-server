@@ -1,7 +1,6 @@
 import { notFoundAssert } from '../../errors'
 import { StatusCode as c } from '../../constants/http'
 import { ErrorHandler } from './decorators/endpoint/error-handler'
-import { parseBody } from '../../utils/http/body-parser'
 import { Logger } from './decorators/endpoint/logger'
 import { Cors } from './decorators/cors'
 import { EndpointsByServiceMap, getServiceMethod, isProperlyService } from './protected'
@@ -20,9 +19,9 @@ export default class Context {
       url        : req.url,
       method     : req.method,
       headers    : { ...req.headers },
-      pathParams : {},
-      queryParams: {},
-      body       : {},
+      pathParams : null,
+      queryParams: null,
+      body       : null,
     }
 
     this.response = {
@@ -63,17 +62,12 @@ export default class Context {
   @Cors({ enable: true })
   @Logger
   @ErrorHandler
-  async execute() {
+  execute() {
     const serviceMethod = getServiceMethod(this)
 
     notFoundAssert(this[serviceMethod], 'Service Method Not Found')
 
-    this.request.body = await parseBody(this._req)
-
-    return this[serviceMethod]({
-      body   : this.request.body,
-      headers: this.request.headers,
-    })
+    return this[serviceMethod]()
   }
 }
 
