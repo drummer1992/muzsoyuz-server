@@ -6,7 +6,7 @@
   "scripts": {
     "build": "npx babel app --out-dir lib",
     "start": "node lib/index.js",
-    "debug": "nodemon --exec babel-node --trace-warnings app/index.js",
+    "debug": "NODE_ENV=test nodemon --exec babel-node --trace-warnings app/index.js",
     "lint": "eslint ./ --ext .js",
     "sandbox": "babel-node sandbox.js",
     "test": "mocha"

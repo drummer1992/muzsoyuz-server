@@ -17,6 +17,7 @@ import createDayOff from '../workflows/api/user/day-off/create'
 import deleteDayOff from '../workflows/api/user/day-off/delete'
 import getDaysOff from '../workflows/api/user/day-off/get'
 import { UploadPipe } from './context/decorators/endpoint/upload'
+import updateImageURL from '../workflows/user/profile/update-image-url'
 
 @Service('/user')
 export default class UserService extends Context {
@@ -37,7 +38,7 @@ export default class UserService extends Context {
   @AuthGuard
   @UploadPipe()
   uploadImage({ fileURL }) {
-    return fileURL
+    return updateImageURL(this.getCurrentUserId(), fileURL)
   }
 
   @Post('/offers')
