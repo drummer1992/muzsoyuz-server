@@ -30,12 +30,6 @@ export default class Context {
     }
   }
 
-  getUserToken() {
-    const authorizationToken = this.request.headers.authorization || ''
-
-    return authorizationToken.split('Bearer ').pop()
-  }
-
   setCurrentUser(_id) {
     this.user = new User({ _id })
   }

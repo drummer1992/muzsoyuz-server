@@ -2,13 +2,19 @@ import http from 'http'
 import { ENV } from './config'
 import main from './main'
 import bootstrap from './bootstrap'
+import socket from './socket'
+import { withCors } from './api/context/decorators/cors'
 
 const onStart = () => console.log(`---Node.js Server started on port ${ENV.PORT}---`)
 
 async function init() {
   await bootstrap()
 
-  http.createServer(main).listen(ENV.PORT, onStart)
+  const server = http.createServer(withCors(main))
+
+  socket(server)
+
+  server.listen(ENV.PORT, onStart)
 }
 
 init().catch(e => {

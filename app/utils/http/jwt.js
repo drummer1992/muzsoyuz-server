@@ -12,8 +12,6 @@ export const verify = token => {
   try {
     return jwt.verify(token, ENV.JWT_AUTH_SECRET)
   } catch (e) {
-    console.error(`[${e.name}]: ${e.message}`)
-
     throw new UnauthorizedError()
   }
 }

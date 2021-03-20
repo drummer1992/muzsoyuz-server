@@ -1,6 +1,6 @@
 module.exports = {
   apps: [{
     name  : 'muzsoyuz-server',
-    script: 'yarn build && yarn start',
+    script: 'yarn && yarn build && yarn start',
   }],
 }
