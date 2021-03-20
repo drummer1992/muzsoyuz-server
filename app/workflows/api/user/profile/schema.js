@@ -1,7 +1,7 @@
-import Validator from '../../../../errors/validation'
+import Validator, { and } from '../../../../errors/validation'
 import { Gender, Role } from '../../../../constants/user'
 
-const { date, forbidden, number, oneOf, string } = Validator
+const { date, forbidden, number, oneOf, string, required } = Validator
 
 export const UpdateUserSchema = {
   yearCommercialExp: number,
@@ -17,4 +17,8 @@ export const UpdateUserSchema = {
   email            : forbidden,
   hash             : forbidden,
   salt             : forbidden,
+}
+
+export const UploadImageSchema = {
+  type: and([required, oneOf(['jpeg', 'png'])]),
 }
