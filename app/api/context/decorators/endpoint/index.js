@@ -1,11 +1,11 @@
 import Url from '../../utils/url'
+import { addEndpoint } from '../../protected'
 
 /**
  * @typedef {Object} Endpoint
  * @property {String} method
  * @property {String} serviceMethod
  * @property {RegExp} regExp
- * @property {Context} Service
  */
 
 function Endpoint(method, pattern) {
@@ -14,18 +14,21 @@ function Endpoint(method, pattern) {
   return function(instance, serviceMethod, descriptor) {
     const endpoint = descriptor.value
 
-    instance.constructor.ENDPOINTS.push({
+    addEndpoint(instance.constructor, {
       method,
       serviceMethod,
-      regExp : url.getRegExp(),
-      Service: instance.constructor,
+      regExp: url.getRegExp(),
     })
 
-    descriptor.value = function(...args) {
+    descriptor.value = function(data) {
       this.request.pathParams = url.parsePathParams(this.request.url)
       this.request.queryParams = url.parseQueryParams(this.request.url)
 
-      return endpoint.apply(this, args)
+      return endpoint.call(this, {
+        ...data,
+        pathParams : this.request.pathParams,
+        queryParams: this.request.queryParams,
+      })
     }
 
     return descriptor

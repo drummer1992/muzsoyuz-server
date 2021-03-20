@@ -1,4 +1,4 @@
-export const isObject = value => value === Object(value)
+export const isObject = value => value === Object(value) && !Array.isArray(value)
 
 export const predicates = {
   isUndefined: value => typeof value === 'undefined',
@@ -57,11 +57,15 @@ export const decoratePrototype = (decorator, object) => {
   })
 }
 
-export const isRange = value => {
-  return isObject(value) && ['from', 'to'].some(attr => attr in value)
-}
+export const isPrimitive = value => typeof value !== 'function'
+  && !isObject(value)
+  && !Array.isArray(value)
 
-export const transformRangeToQuery = range => omitBy({
-  $gte: range.from,
-  $lte: range.to,
-})
+export const clone = item => isPrimitive(item)
+  ? item
+  : Object.entries(item).reduce(
+    (result, [key, value]) => Object.assign(result, {
+      [key]: isPrimitive(value) ? value : clone(value),
+    }),
+    isObject(item) ? {} : [],
+  )

@@ -12,10 +12,10 @@ export function Transform(schema, options = {}) {
   return function(instance, serviceMethod, descriptor) {
     const method = descriptor.value
 
-    descriptor.value = function(...args) {
-      this.request[options.context] = transform(this.request[options.context], schema)
+    descriptor.value = function(data) {
+      data[options.context] = transform(data[options.context], schema)
 
-      return method.apply(this, args)
+      return method.call(this, data)
     }
 
     return descriptor

@@ -6,22 +6,22 @@ import signUp from '../workflows/api/auth/sign-up'
 import signIn from '../workflows/api/auth/sign-in'
 import { StatusCode as c } from '../constants/http'
 import { StatusCode } from './context/decorators/status-code'
-import { ValidationPipe } from '../errors/validation/decorator'
 import { AuthSchema } from '../workflows/api/auth/schema'
+import { BodyValidationPipe } from './context/decorators/validation'
 
 @Service('/auth')
 export default class AuthService extends Context {
   @Post('/signUp')
-  @ValidationPipe(AuthSchema)
+  @BodyValidationPipe(AuthSchema)
   @StatusCode(c.CREATED)
-  signUp(credentials) {
-    return signUp(credentials)
+  signUp() {
+    return signUp(this.request.body)
   }
 
   @Post('/signIn')
-  @ValidationPipe(AuthSchema)
-  signIn(credentials) {
-    return signIn(credentials)
+  @BodyValidationPipe(AuthSchema)
+  signIn() {
+    return signIn(this.request.body)
   }
 
   @Get('/verify')

@@ -1,15 +1,16 @@
-import { isRange, transformRangeToQuery } from '../../utils/object'
+import { isRange, transformRangeToQuery } from '../../utils/mongoose'
+import { clone } from '../../utils/object'
 
 const resolveQuery = query => {
-  const resolvedQuery = { ...(query || {}) }
-  const where = { ...(resolvedQuery.where || {}) }
-  const props = [...(resolvedQuery.props || [])]
+  const clonedQuery = query ? clone(query) : {}
+  const where = clonedQuery.where || {}
+  const props = clonedQuery.props || []
 
-  const [attr, direction] = (query.orderBy || 'createdAt DESC').split(' ')
+  const [attr, direction] = (clonedQuery.orderBy || 'createdAt DESC').split(' ')
 
   const orderBy = `${direction === 'DESC' ? '-' : '+'}${attr}`
-  const limit = query.limit || 30
-  const offset = query.offset || 0
+  const limit = clonedQuery.limit || 30
+  const offset = clonedQuery.offset || 0
 
   Object.keys(where).forEach(key => {
     if (isRange(where[key])) {

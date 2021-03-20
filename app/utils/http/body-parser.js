@@ -1,8 +1,8 @@
 const parse = str => {
   try {
-    return str && JSON.parse(str)
+    return str ? JSON.parse(str) : null
   } catch {
-    return str
+    return null
   }
 }
 

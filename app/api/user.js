@@ -7,7 +7,7 @@ import createOffer from '../workflows/api/user/offers/create'
 import updateOffer from '../workflows/api/user/offers/update'
 import { StatusCode as c } from '../constants/http'
 import { StatusCode } from './context/decorators/status-code'
-import { ValidationPipe } from '../errors/validation/decorator'
+import { BodyValidationPipe, PathParamsValidationPipe } from './context/decorators/validation'
 import { CreateOfferSchema, FindOffersSchema, UpdateOfferSchema } from '../workflows/api/user/offers/schema'
 import { CreateDayOffSchema, DeleteDayOffSchema } from '../workflows/api/user/day-off/schema'
 import { UpdateUserSchema } from '../workflows/api/user/profile/schema'
@@ -27,32 +27,32 @@ export default class UserService extends Context {
 
   @Put()
   @AuthGuard
-  @ValidationPipe(UpdateUserSchema)
-  updateProfile(changes) {
-    return updateProfile(this.getCurrentUserId(), changes)
+  @BodyValidationPipe(UpdateUserSchema)
+  updateProfile() {
+    return updateProfile(this.getCurrentUserId(), this.request.body)
   }
 
   @Post('/offers')
   @AuthGuard
-  @ValidationPipe(CreateOfferSchema)
+  @BodyValidationPipe(CreateOfferSchema)
   @StatusCode(c.CREATED)
-  createOffer(payload) {
-    return createOffer(this.getCurrentUserId(), payload)
+  createOffer() {
+    return createOffer(this.getCurrentUserId(), this.request.body)
   }
 
   @Put('/offers/{offerId}')
   @AuthGuard
-  @ValidationPipe(UpdateOfferSchema)
-  updateOffer(changes) {
+  @BodyValidationPipe(UpdateOfferSchema)
+  updateOffer() {
     const { offerId } = this.request.pathParams
 
-    return updateOffer(this.getCurrentUserId(), offerId, changes)
+    return updateOffer(this.getCurrentUserId(), offerId, this.request.body)
   }
 
   @Post('/offers/find')
-  @ValidationPipe(FindOffersSchema, { required: false })
-  findOffers(query) {
-    return findOffers(query)
+  @BodyValidationPipe(FindOffersSchema, { required: false })
+  findOffers() {
+    return findOffers(this.request.body)
   }
 
   @Delete('/offers/{offerId}')
@@ -72,15 +72,15 @@ export default class UserService extends Context {
 
   @Post('/daysOff')
   @AuthGuard
-  @ValidationPipe(CreateDayOffSchema)
+  @BodyValidationPipe(CreateDayOffSchema)
   @StatusCode(c.CREATED)
-  createDayOff(payload) {
-    return createDayOff(this.getCurrentUserId(), payload)
+  createDayOff() {
+    return createDayOff(this.getCurrentUserId(), this.request.body)
   }
 
   @Delete('/daysOff/{dayOffId}')
   @AuthGuard
-  @ValidationPipe(DeleteDayOffSchema, { context: 'pathParams' })
+  @PathParamsValidationPipe(DeleteDayOffSchema)
   @StatusCode(c.NO_CONTENT)
   deleteDayOff() {
     const { dayOffId } = this.request.pathParams

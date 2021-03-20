@@ -4,11 +4,12 @@ import { ErrorHandler } from './decorators/endpoint/error-handler'
 import { parseBody } from '../../utils/http/body-parser'
 import { Logger } from './decorators/endpoint/logger'
 import { Cors } from './decorators/cors'
+import { EndpointsByServiceMap, getServiceMethod, isProperlyService } from './protected'
 
 export default class Context {
   constructor(req, res) {
-    this.req = req
-    this.res = res
+    this._req = req
+    this._res = res
 
     /**
      * @type {User}
@@ -28,20 +29,6 @@ export default class Context {
       statusCode: c.OK,
       headers   : {},
     }
-  }
-
-  /**
-   * @type {RegExp}
-   */
-  static serviceRegExp
-
-  /**
-   * @type {Endpoint[]}
-   */
-  static ENDPOINTS = []
-
-  static isProperlyService(url) {
-    return new RegExp(this.serviceRegExp.source + '([^\\w]|$)').test(url)
   }
 
   getUserToken() {
@@ -73,39 +60,31 @@ export default class Context {
     }
   }
 
-  static getCurrentService(url) {
-    const { ENDPOINTS } = this
-
-    const endpoint = ENDPOINTS.find(({ Service }) => Service.isProperlyService(url))
-
-    return endpoint?.Service
-  }
-
-  getServiceMethod() {
-    const { ENDPOINTS } = this.constructor
-
-    const path = this.request.url.replace(this.constructor.serviceRegExp, '')
-
-    const endpoint = ENDPOINTS.find(endpoint => {
-      const sameMethod = endpoint.method === this.request.method
-      const regexpIsMatched = endpoint.regExp.test(path)
-
-      return sameMethod && regexpIsMatched
-    })
-
-    return endpoint?.serviceMethod
-  }
-
   @Cors({ enable: true })
   @Logger
   @ErrorHandler
   async execute() {
-    const serviceMethod = this.getServiceMethod()
+    const serviceMethod = getServiceMethod(this)
 
-    notFoundAssert(serviceMethod, 'Service Method Not Found')
+    notFoundAssert(this[serviceMethod], 'Service Method Not Found')
 
-    this.request.body = await parseBody(this.req)
+    this.request.body = await parseBody(this._req)
 
-    return this[serviceMethod](this.request.body)
+    return this[serviceMethod]({
+      body   : this.request.body,
+      headers: this.request.headers,
+    })
+  }
+}
+
+/**
+ * @param {String} url
+ * @returns {Context} Context
+ */
+export const getCurrentService = url => {
+  for (const Service of EndpointsByServiceMap.keys()) {
+    if (isProperlyService(Service, url)) {
+      return Service
+    }
   }
 }
