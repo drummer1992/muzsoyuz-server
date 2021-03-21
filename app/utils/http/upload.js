@@ -16,7 +16,7 @@ export const uploadFile = (req, destination, fileName) => new Promise((resolve, 
       return reject(new InvalidArgumentsError('Unable to parse form data'))
     }
 
-    if (!file.path) {
+    if (!file?.image?.path) {
       return reject(new InvalidArgumentsError('Invalid form data provided'))
     }
 
