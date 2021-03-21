@@ -6,7 +6,11 @@ export const uploadFile = (req, destination, fileName) => new Promise((resolve, 
   const form = formidable({ uploadDir: path.resolve(__dirname, destination) })
 
   form.on('fileBegin', (name, file) => {
-    file.path = `${destination}/${fileName}`
+    const filePath = `${destination}/${fileName}`
+
+    file.path = filePath
+
+    console.log({ filePath })
   })
 
   form.parse(req, (err, fields, { file } = {}) => {

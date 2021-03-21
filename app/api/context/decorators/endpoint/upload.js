@@ -27,9 +27,13 @@ export function UploadPipe(options) {
 
       await uploadFile(this._req, pathToDir, fileName)
 
+      const fileURL = `${e.STATIC_SERVER + options.directory}/${this.getCurrentUserId()}/${fileName}`
+
+      console.log({ fileURL })
+
       return endpoint.call(this, {
         ...data,
-        fileURL: `${e.STATIC_SERVER + options.directory}/${this.getCurrentUserId()}/${fileName}`,
+        fileURL: fileURL,
       })
     }
 
