@@ -20,6 +20,8 @@ export const uploadFile = (req, destination, fileName) => new Promise((resolve, 
       return reject(new InvalidArgumentsError('Unable to parse form data'))
     }
 
+    console.log({ path: file.path, name: file.name })
+
     return resolve(file)
   })
 })
