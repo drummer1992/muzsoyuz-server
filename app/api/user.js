@@ -7,10 +7,14 @@ import createOffer from '../workflows/api/user/offers/create'
 import updateOffer from '../workflows/api/user/offers/update'
 import { StatusCode as c } from '../constants/http'
 import { StatusCode } from './context/decorators/status-code'
-import { BodyValidationPipe, PathParamsValidationPipe } from './context/decorators/validation'
+import {
+  BodyValidationPipe,
+  PathParamsValidationPipe,
+  QueryParamsValidationPipe,
+} from './context/decorators/validation'
 import { CreateOfferSchema, FindOffersSchema, UpdateOfferSchema } from '../workflows/api/user/offers/schema'
 import { CreateDayOffSchema, DeleteDayOffSchema } from '../workflows/api/user/day-off/schema'
-import { UpdateUserSchema } from '../workflows/api/user/profile/schema'
+import { UpdateUserSchema, UploadImageSchema } from '../workflows/api/user/profile/schema'
 import findOffers from '../workflows/api/user/offers/find'
 import deleteOffer from '../workflows/api/user/offers/delete'
 import createDayOff from '../workflows/api/user/day-off/create'
@@ -34,9 +38,11 @@ export default class UserService extends Context {
     return updateProfile(this.getCurrentUserId(), this.request.body)
   }
 
-  @Post({ parseBody: false, path: '/uploadImage/{fileName}' })
+  @Post({ parseBody: false, path: '/uploadImage' })
   @AuthGuard
-  @UploadPipe()
+  @QueryParamsValidationPipe(UploadImageSchema)
+  @UploadPipe({ directory: id => `/images/${id}/avatars` })
+  @StatusCode(c.CREATED)
   uploadImage({ fileURL }) {
     return updateImageURL(this.getCurrentUserId(), fileURL)
   }

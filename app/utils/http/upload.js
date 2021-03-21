@@ -1,11 +1,26 @@
-import fs from 'fs'
 import path from 'path'
+import formidable from 'formidable'
+import { InvalidArgumentsError } from '../../errors'
+import { isEmpty } from '../object'
 
-export const uploadFile = (req, destination) => new Promise((resolve, reject) => {
-  const writeStream = fs.createWriteStream(path.resolve(__dirname, destination))
+export const uploadFile = (req, destination, fileName) => new Promise((resolve, reject) => {
+  const form = formidable({ uploadDir: path.resolve(__dirname, destination) })
 
-  writeStream.on('error', reject)
-  writeStream.on('close', resolve)
-  req.on('error', reject)
-  req.pipe(writeStream)
+  form.on('fileBegin', (name, file) => {
+    file.path = `${destination}/${fileName}`
+  })
+
+  form.parse(req, (err, fields, files) => {
+    if (err) {
+      console.error(err.stack)
+
+      return reject(new InvalidArgumentsError('Unable to parse form data'))
+    }
+
+    if (isEmpty(files)) {
+      return reject(new InvalidArgumentsError('Invalid form data provided'))
+    }
+
+    return resolve(files)
+  })
 })

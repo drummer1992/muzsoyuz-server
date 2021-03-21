@@ -170,22 +170,22 @@ const Validator = {
   min,
 }
 
-const assertPayloadIsValid = payload => {
+const assertPayloadIsValid = (context, payload) => {
   and([
     required,
     object,
     object.notEmpty,
-  ], 'payload should be not empty object')(payload)
+  ], `${context} is required`)(payload)
 }
 
 export const validate = (schema, options) => payload => {
-  const { required = true } = options
+  const { required = true, context = 'body' } = options
 
   try {
     const keys = Object.keys(schema)
 
     if (required || payload) {
-      assertPayloadIsValid(payload)
+      assertPayloadIsValid(context, payload)
 
       keys.forEach(key => {
         const validator = schema[key]

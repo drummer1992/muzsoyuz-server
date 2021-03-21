@@ -1,13 +1,18 @@
 import assert from 'assert'
-import fs from 'fs/promises'
 import { uploadFile } from '../../../../utils/http/upload'
 import { ENV as e } from '../../../../config'
+import { uuidV4 } from '../../../../utils/uuid'
+import { makeDirIfNotExists } from '../../../../utils/file-system'
 
-const makeDirIfNotExists = path => fs.mkdir(path).catch(console.error)
+const resolveDirectory = (directory, userId) => {
+  if (typeof directory === 'function') {
+    return directory(userId)
+  }
 
-export function UploadPipe(options) {
-  options = options || { directory: e.STATIC_FOLDER }
+  return directory || ''
+}
 
+export function UploadPipe(options = {}) {
   assert(options?.directory, 'directory is required')
 
   return function(instance, serviceMethod, descriptor) {
@@ -15,20 +20,22 @@ export function UploadPipe(options) {
 
     descriptor.value = async function(data = {}) {
       assert(!this.request.body, 'body has already parsed')
-      assert(this.request.pathParams, 'pathParams hasn`t parsed')
-      assert(this.request.pathParams.fileName, 'pathParams.fileName is required')
 
-      const pathToDir = `${e.PATH_TO_STATIC + options.directory}/${this.getCurrentUserId()}`
+      const folder = e.STATIC_FOLDER + resolveDirectory(options.directory, this.getCurrentUserId())
+
+      const pathToDir = e.PATH_TO_STATIC + folder
 
       await makeDirIfNotExists(pathToDir)
 
-      const fileName = this.request.pathParams.fileName
+      const { type } = this.request.queryParams
 
-      await uploadFile(this._req, `${pathToDir}/${fileName}`)
+      const fileName = `${uuidV4()}.${type}`
+
+      await uploadFile(this._req, pathToDir, fileName)
 
       return endpoint.call(this, {
         ...data,
-        fileURL: `${e.STATIC_SERVER + options.directory}/${this.getCurrentUserId()}/${fileName}`,
+        fileURL: `${e.STATIC_SERVER + folder}/${fileName}`,
       })
     }
 
