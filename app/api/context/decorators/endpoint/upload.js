@@ -25,7 +25,7 @@ export function UploadPipe(options) {
 
       const fileName = `${uuidV4()}.${type}`
 
-      await uploadFile(this._req, `${pathToDir}/${fileName}`)
+      await uploadFile(this._req, pathToDir, fileName)
 
       return endpoint.call(this, {
         ...data,
