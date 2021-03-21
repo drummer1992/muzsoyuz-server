@@ -41,7 +41,7 @@ export default class UserService extends Context {
   @Post({ parseBody: false, path: '/uploadImage' })
   @AuthGuard
   @QueryParamsValidationPipe(UploadImageSchema)
-  @UploadPipe()
+  @UploadPipe({ directory: id => `/images/${id}/avatars` })
   @StatusCode(c.CREATED)
   uploadImage({ fileURL }) {
     return updateImageURL(this.getCurrentUserId(), fileURL)
