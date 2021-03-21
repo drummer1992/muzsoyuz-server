@@ -6,23 +6,17 @@ export const uploadFile = (req, destination, fileName) => new Promise((resolve, 
   const form = formidable({ uploadDir: path.resolve(__dirname, destination) })
 
   form.on('fileBegin', (name, file) => {
-    const filePath = `${destination}/${fileName}`
-
-    file.path = filePath
-
-    console.log({ filePath })
+    file.path = `${destination}/${fileName}`
   })
 
   form.on('error', reject)
 
-  form.parse(req, (err, fields, { file } = {}) => {
+  form.parse(req, (err, fields, file) => {
     if (err) {
       console.error(err.stack)
 
       return reject(new InvalidArgumentsError('Unable to parse form data'))
     }
-
-    console.log(file)
 
     return resolve(file)
   })
