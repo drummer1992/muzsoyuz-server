@@ -13,6 +13,8 @@ export const uploadFile = (req, destination, fileName) => new Promise((resolve, 
     console.log({ filePath })
   })
 
+  form.on('error', reject)
+
   form.parse(req, (err, fields, { file } = {}) => {
     if (err) {
       console.error(err.stack)
@@ -20,7 +22,7 @@ export const uploadFile = (req, destination, fileName) => new Promise((resolve, 
       return reject(new InvalidArgumentsError('Unable to parse form data'))
     }
 
-    console.log({ path: file.path, name: file.name })
+    console.log(file)
 
     return resolve(file)
   })
