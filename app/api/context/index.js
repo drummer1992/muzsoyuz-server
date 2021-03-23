@@ -2,7 +2,6 @@ import { notFoundAssert } from '../../errors'
 import { StatusCode as c } from '../../constants/http'
 import { ErrorHandler } from './decorators/endpoint/error-handler'
 import { Logger } from './decorators/endpoint/logger'
-import { Cors } from './decorators/cors'
 import { EndpointsByServiceMap, getServiceMethod, isProperlyService } from './protected'
 
 export default class Context {
@@ -53,7 +52,6 @@ export default class Context {
     }
   }
 
-  @Cors({ enable: true })
   @Logger
   @ErrorHandler
   execute() {

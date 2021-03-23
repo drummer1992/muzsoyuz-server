@@ -16,15 +16,17 @@
   },
   "globals": {
     "User": true,
+    "Chat": true,
+    "ChatMessage": true,
     "DayOff": true,
     "Offer": true,
     "Reaction": true,
     "Role": true,
     "assert": true,
     "describe": true,
-    "it":  true,
+    "it": true,
     "before": true,
-    "after":  true,
+    "after": true,
     "faker": true
   },
   "rules": {

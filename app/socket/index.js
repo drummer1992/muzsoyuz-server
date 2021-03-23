@@ -1,22 +1,16 @@
-import io from 'socket.io'
+import { Server } from 'socket.io'
+import gateway from './gateway'
+import socketMiddleware from './utils/middleware'
 
-const ioProvider = fn => server => {
-  fn(io(server, {
+const socket = server => {
+  const socket = new Server(server, {
     transports: ['polling', 'websocket'],
-  }))
-}
+    cors      : { methods: ['GET', 'POST'] },
+  })
 
-const socket = ioProvider(
-  /**
-   *
-   * @param {Server} io
-   */
-  io => {
-    io.on('connection', socket => {
-      console.log(socket)
-      console.log('PABEDA')
-    })
-  },
-)
+  socket.use(socketMiddleware)
+
+  socket.on('connection', gateway)
+}
 
 export default socket
