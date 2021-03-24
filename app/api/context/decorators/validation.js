@@ -1,4 +1,4 @@
-import { ValidationPipe } from '../../../errors/validation/decorator'
+import { ValidationPipe } from '../../../utils/decorators/validation-pipe'
 
 export function BodyValidationPipe(schema, options = {}) {
   return ValidationPipe(schema, {

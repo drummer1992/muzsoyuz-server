@@ -1,4 +1,4 @@
-import { validate } from './index'
+import { validate } from '../../errors/validation'
 
 export function ValidationPipe(schema, options = {}) {
   const context = options?.context

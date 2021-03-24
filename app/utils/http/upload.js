@@ -6,8 +6,10 @@ import { isEmpty } from '../object'
 export const uploadFile = (req, destination, fileName) => new Promise((resolve, reject) => {
   const form = formidable({ uploadDir: path.resolve(__dirname, destination) })
 
+  const saveAt = `${destination}/${fileName}`
+
   form.on('fileBegin', (name, file) => {
-    file.path = `${destination}/${fileName}`
+    file.path = saveAt
   })
 
   form.parse(req, (err, fields, files) => {
@@ -21,6 +23,6 @@ export const uploadFile = (req, destination, fileName) => new Promise((resolve, 
       return reject(new InvalidArgumentsError('Invalid form data provided'))
     }
 
-    return resolve(files)
+    return resolve(saveAt)
   })
 })
