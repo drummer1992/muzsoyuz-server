@@ -1,10 +1,10 @@
 import assert from 'assert'
-import { isNumber } from '../../utils/number'
-import { isEmpty, isObject, predicates as p } from '../../utils/object'
-import { isString } from '../../utils/string'
-import { InvalidArgumentsError } from '../index'
-import { isDate, isFutureDate } from '../../utils/date'
-import { isObjectId } from '../../db/utils'
+import { isNumber } from '../utils/number'
+import { isEmpty, isObject, predicates as p } from '../utils/object'
+import { isString } from '../utils/string'
+import { InvalidArgumentsError } from './index'
+import { isDate, isFutureDate } from '../utils/date'
+import { isObjectId } from '../db/utils'
 
 export const and = (validators, message) => (value, key) => {
   try {

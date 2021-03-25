@@ -1,5 +1,6 @@
 import Validator, { and } from '../../../../errors/validation'
 import { Gender, Role } from '../../../../constants/user'
+import * as t from '../../../../utils/transform'
 
 const { date, forbidden, number, oneOf, string, required } = Validator
 
@@ -20,5 +21,16 @@ export const UpdateUserSchema = {
 }
 
 export const UploadImageSchema = {
-  type: and([required, oneOf(['jpeg', 'png'])]),
+  type  : and([required, oneOf(['jpeg', 'png'])]),
+  width : and([required, number]),
+  height: and([required, number]),
+  x     : and([required, number]),
+  y     : and([required, number]),
+}
+
+export const UploadImageTransformationSchema = {
+  width : t.number,
+  height: t.number,
+  x     : t.number,
+  y     : t.number,
 }
