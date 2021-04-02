@@ -57,9 +57,7 @@ export const decoratePrototype = (decorator, object) => {
   })
 }
 
-export const isPrimitive = value => typeof value !== 'function'
-  && !isObject(value)
-  && !Array.isArray(value)
+export const isPrimitive = value => !isObject(value) && !Array.isArray(value)
 
 export const clone = item => isPrimitive(item)
   ? item

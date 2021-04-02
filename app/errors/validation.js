@@ -6,6 +6,12 @@ import { InvalidArgumentsError } from './index'
 import { isDate, isFutureDate } from '../utils/date'
 import { isObjectId } from '../db/utils'
 
+/**
+ *
+ * @param {Array} validators
+ * @param {String} [message]
+ * @returns {function(...[*]=)}
+ */
 export const and = (validators, message) => (value, key) => {
   try {
     validators.forEach(validate => validate(value, key))
@@ -175,11 +181,11 @@ const assertPayloadIsValid = (context, payload) => {
     required,
     object,
     object.notEmpty,
-  ], `${context} is required`)(payload)
+  ], `${context || 'payload'} is required`)(payload)
 }
 
 export const validate = (schema, options) => payload => {
-  const { required = true, context = 'body' } = options
+  const { required = true, context } = options
 
   try {
     const keys = Object.keys(schema)

@@ -67,6 +67,14 @@ const schema = new Schema({
     type  : Schema.Types.String,
     select: false,
   },
+  lastSeen         : {
+    type   : Schema.Types.Date,
+    default: Date.now,
+  },
+  isActive         : {
+    type   : Schema.Types.Boolean,
+    default: true,
+  },
 }, { timestamps: true, versionKey: false })
 
 class UserModel extends BaseModel {

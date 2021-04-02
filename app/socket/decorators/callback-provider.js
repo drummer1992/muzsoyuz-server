@@ -1,7 +1,7 @@
 import { identity } from '../../utils/array'
 
-export const callbackProvider = eventHandler => (...args) => {
-  let message
+const callbackProvider = eventHandler => (...args) => {
+  let message = args[0]
   let callback = identity
   const lastArg = args[args.length - 1]
 
@@ -13,3 +13,5 @@ export const callbackProvider = eventHandler => (...args) => {
 
   return eventHandler(message, callback)
 }
+
+export default callbackProvider

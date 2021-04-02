@@ -2,18 +2,20 @@ import mongoose, { Schema } from 'mongoose'
 import BaseModel from './base'
 
 const chatMessageSchema = new Schema({
-  text: {
+  text    : {
     type    : Schema.Types.String,
     required: true,
   },
-  user: {
+  viewed  : {
+    type   : Schema.Types.Boolean,
+    default: false,
+  },
+  senderId: {
     type    : Schema.Types.ObjectId,
-    ref     : 'User',
     required: true,
   },
-  chat: {
+  chatId  : {
     type    : Schema.Types.ObjectId,
-    ref     : 'Chat',
     required: true,
   },
 }, { timestamps: true, versionKey: false })
@@ -30,7 +32,13 @@ const chatSchema = new Schema({
   }],
 }, { timestamps: true, versionKey: false })
 
-chatSchema.loadClass(BaseModel)
+class Chat extends BaseModel {
+  hasUnreadMessages(userId) {
+    return this.messages.some(msg => !msg.viewed && msg.senderId === userId)
+  }
+}
+
+chatSchema.loadClass(Chat)
 chatMessageSchema.loadClass(BaseModel)
 
 global.Chat = mongoose.model('Chat', chatSchema)

@@ -1,4 +1,4 @@
-import { APIError, InternalServerError } from '../../../errors'
+import { APIError, InternalServerError } from '../../errors'
 
 const errorHandlerDecorator = fn => async function(...args) {
   try {
@@ -13,8 +13,6 @@ const errorHandlerDecorator = fn => async function(...args) {
 
       error.message = 'Internal Server Error'
     }
-
-    this.setStatusCode(error.statusCode)
 
     return error
   }

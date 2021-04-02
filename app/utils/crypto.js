@@ -1,6 +1,7 @@
 import crypto from 'crypto'
 import { promisify } from 'util'
 
+// TODO: use scrypt instead
 const pbkdf2 = promisify(crypto.pbkdf2)
 
 const SIZE = 16

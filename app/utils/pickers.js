@@ -1,0 +1,1 @@
+export const objectId = item => item.objectId || (item._id && item._id.toString()) || undefined
