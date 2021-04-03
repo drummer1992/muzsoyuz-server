@@ -21,6 +21,7 @@ const initSocket = server => {
   const socket = new Server(server, {
     transports: ['polling', 'websocket'],
     cors      : { methods: ['GET', 'POST'] },
+    path      : '/api/v2/chat',
   })
 
   socket.use(authMiddleware)
