@@ -37,7 +37,7 @@ class ChatGateway extends Gateway {
   async setViewed(chatId) {
     await setViewed(this.user.objectId, chatId)
 
-    this.client.broadcast.to(chatId).emit(e.CHAT_VIEWED, chatId)
+    this.socket.to(chatId).emit(e.CHAT_VIEWED, chatId)
   }
 
   @ValidationPipe(MessageValidationSchema)
