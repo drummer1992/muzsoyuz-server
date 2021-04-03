@@ -8,11 +8,16 @@ import getConversations from '../bl/get-conversations'
 import getConversation from '../bl/get-conversation'
 import getChatIds from '../bl/get-chat-ids'
 import setViewed from '../bl/set-viewed'
+import getUsers from '../bl/get-users'
 import Gateway from './generic-gateway'
 import e from '../event'
 
 @ErrorHandler
 class ChatGateway extends Gateway {
+  getUsers() {
+    return getUsers(this.user.objectId)
+  }
+
   typingStart(roomId) {
     argumentsAssert(roomId, 'room identifier is required')
 
