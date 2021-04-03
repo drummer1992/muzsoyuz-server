@@ -16,22 +16,17 @@ class ChatGateway extends Gateway {
   typingStart(roomId) {
     argumentsAssert(roomId, 'room identifier is required')
 
-    this.client.broadcast.to(roomId).emit(e.TYPING_STARTED, this.user._id)
-  }
-
-  typingEnd(roomId) {
-    argumentsAssert(roomId, 'room identifier is required')
-
-    this.client.broadcast.to(roomId).emit(e.TYPING_ENDED, this.user._id)
+    this.client.broadcast.to(roomId).emit(e.TYPING_STARTED, roomId)
   }
 
   async #setActive(isActive, chatIds) {
-    await setActive(this.user.objectId, isActive)
+    const changes = { isActive, lastSeen: Date.now() }
+
+    await setActive(this.user.objectId, changes)
 
     this.client.broadcast.to(chatIds).emit(e.USER_ACTIVE, {
-      _id     : this.user.objectId,
-      isActive,
-      lastSeen: Date.now(),
+      _id: this.user.objectId,
+      ...changes,
     })
   }
 
@@ -55,11 +50,8 @@ class ChatGateway extends Gateway {
   async createConversation(participantId) {
     const conversation = await createConversation(this.user._id, participantId)
 
-    this.client.to(participantId).emit(e.CREATED_CONVERSATION, conversation._id)
-
-    await this.client.join(conversation._id)
-
-    return conversation
+    this.socket.to([participantId, this.user.objectId])
+      .emit(e.CREATED_CONVERSATION, conversation._id)
   }
 
   getConversations() {
