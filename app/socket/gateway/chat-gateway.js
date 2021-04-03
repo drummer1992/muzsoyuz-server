@@ -48,10 +48,10 @@ class ChatGateway extends Gateway {
   }
 
   async createConversation(participantId) {
-    const conversation = await createConversation(this.user._id, participantId)
+    const conversationId = await createConversation(this.user._id, participantId)
 
     this.socket.to([participantId, this.user.objectId])
-      .emit(e.CREATED_CONVERSATION, conversation._id)
+      .emit(e.CREATED_CONVERSATION, conversationId)
   }
 
   getConversations() {

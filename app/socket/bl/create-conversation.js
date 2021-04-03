@@ -18,8 +18,5 @@ export default async (userId, participantId) => {
 
   const created = await Chat.create({ participants: [userId, participantId] })
 
-  return {
-    _id : created.objectId,
-    user: participant,
-  }
+  return created.objectId
 }
