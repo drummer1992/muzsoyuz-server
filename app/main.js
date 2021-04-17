@@ -1,6 +1,6 @@
 import { NotFoundError } from './errors'
 import { StatusCode as c } from './constants/http'
-import { getCurrentService } from './api/context'
+import Context from './api/context'
 
 /**
  * @param {IncomingMessage} req
@@ -12,7 +12,7 @@ const main = async (req, res) => {
   let statusCode
   let headers
 
-  const Service = getCurrentService(req.url)
+  const Service = Context.getCurrentService(req.url)
 
   if (Service) {
     // noinspection JSValidateTypes

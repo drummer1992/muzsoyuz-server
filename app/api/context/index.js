@@ -29,6 +29,14 @@ export default class Context {
     }
   }
 
+  static getCurrentService(url) {
+    for (const Service of EndpointsByServiceMap.keys()) {
+      if (isProperlyService(Service, url)) {
+        return Service
+      }
+    }
+  }
+
   setCurrentUser(_id) {
     this.user = new User({ _id })
   }
@@ -60,17 +68,5 @@ export default class Context {
     notFoundAssert(this[serviceMethod], 'Service Method Not Found')
 
     return this[serviceMethod]()
-  }
-}
-
-/**
- * @param {String} url
- * @returns {Context} Context
- */
-export const getCurrentService = url => {
-  for (const Service of EndpointsByServiceMap.keys()) {
-    if (isProperlyService(Service, url)) {
-      return Service
-    }
   }
 }
