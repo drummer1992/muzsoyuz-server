@@ -24,6 +24,12 @@ class ChatGateway extends Gateway {
     this.client.broadcast.to(roomId).emit(e.TYPING_STARTED, roomId)
   }
 
+  typingEnd(roomId) {
+    argumentsAssert(roomId, 'room identifier is required')
+
+    this.client.broadcast.to(roomId).emit(e.TYPING_ENDED, roomId)
+  }
+
   async #setActive(isActive, chatIds) {
     const changes = { isActive, lastSeen: Date.now() }
 
