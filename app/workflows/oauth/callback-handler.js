@@ -1,3 +1,4 @@
+import assert from 'assert'
 import createUser from '../user/profile/create'
 import { sign } from '../../utils/http/jwt'
 
@@ -11,12 +12,15 @@ const callbackHandler = async oauthClient => {
 
   const { idName } = oauthClient.constructor.config
 
-  let user = await User.findOne({
-    $or: [
-      { [idName]: profile[idName] },
-      { email: profile.email },
-    ],
-  })
+  assert(profile[idName], `${idName} is empty`)
+
+  const orClause = [
+    { [idName]: profile[idName] },
+  ]
+
+  profile.email && orClause.push({ email: profile.email })
+
+  let user = await User.findOne({ $or: orClause })
 
   if (!user) {
     user = await createUser(profile)
