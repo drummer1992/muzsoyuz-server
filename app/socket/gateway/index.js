@@ -9,8 +9,6 @@ const onEvent = (eventHandler, { client, event }) => callbackProvider(
 
     const response = await eventHandler(message)
 
-    response && console.log('Response:', JSON.stringify(response, null, 2))
-
     if (response instanceof Error) {
       return client.emit(e.CHAT_ERROR, response)
     }

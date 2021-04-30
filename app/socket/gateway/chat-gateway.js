@@ -21,13 +21,17 @@ class ChatGateway extends Gateway {
   typingStart(roomId) {
     argumentsAssert(roomId, 'room identifier is required')
 
-    this.client.broadcast.to(roomId).emit(e.TYPING_STARTED, roomId)
+    this.client.broadcast.to(roomId)
+      .except(this.user.objectId)
+      .emit(e.TYPING_STARTED, roomId)
   }
 
   typingEnd(roomId) {
     argumentsAssert(roomId, 'room identifier is required')
 
-    this.client.broadcast.to(roomId).emit(e.TYPING_ENDED, roomId)
+    this.client.broadcast.to(roomId)
+      .except(this.user.objectId)
+      .emit(e.TYPING_ENDED, roomId)
   }
 
   async #setActive(isActive, chatIds) {
@@ -46,18 +50,20 @@ class ChatGateway extends Gateway {
   async setViewed(chatId) {
     await setViewed(this.user.objectId, chatId)
 
-    this.socket.to(chatId).emit(e.CHAT_VIEWED, chatId)
+    this.socket.to(chatId)
+      .except(this.user.objectId)
+      .emit(e.CHAT_VIEWED, chatId)
   }
 
   @ValidationPipe(MessageValidationSchema)
   async message(payload) {
-    const message = await messageEventHandler(this.user._id, payload)
+    const message = await messageEventHandler(this.user.objectId, payload)
 
     this.socket.to(payload.chatId).emit(e.NEW_MESSAGE, message)
   }
 
   async createConversation(participantId) {
-    const conversationId = await createConversation(this.user._id, participantId)
+    const conversationId = await createConversation(this.user.objectId, participantId)
 
     this.socket.to([participantId, this.user.objectId])
       .emit(e.CREATED_CONVERSATION, conversationId)
@@ -68,7 +74,7 @@ class ChatGateway extends Gateway {
   }
 
   async joinTheCreatedConversation(chatId) {
-    const conversation = await getConversation(this.user._id, chatId)
+    const conversation = await getConversation(this.user.objectId, chatId)
 
     this.client.join(chatId)
 
