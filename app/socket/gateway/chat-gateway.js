@@ -98,7 +98,9 @@ class ChatGateway extends Gateway {
 
     await this.#setActive(false, chatIds)
 
-    rooms.forEach(this.client.leave)
+    rooms.forEach(room => {
+      this.client.leave(room)
+    })
   }
 }
 
