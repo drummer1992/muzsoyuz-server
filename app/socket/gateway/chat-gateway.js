@@ -41,10 +41,6 @@ class ChatGateway extends Gateway {
     })
   }
 
-  #handleClientConnection(isActive, chatIds) {
-    this.client[isActive ? 'join' : 'leave'](chatIds)
-  }
-
   async setViewed(chatId) {
     await setViewed(this.user.objectId, chatId)
 
@@ -82,9 +78,9 @@ class ChatGateway extends Gateway {
 
     const rooms = [this.user.objectId, ...chatIds]
 
-    await this.#setActive(true, rooms)
+    await this.#setActive(true, chatIds)
 
-    this.#handleClientConnection(true, rooms)
+    this.client.join(rooms)
   }
 
   async disconnect() {
@@ -92,9 +88,9 @@ class ChatGateway extends Gateway {
 
     const rooms = [this.user.objectId, ...chatIds]
 
-    await this.#setActive(false, rooms)
+    await this.#setActive(false, chatIds)
 
-    this.#handleClientConnection(false, rooms)
+    rooms.forEach(this.client.leave)
   }
 }
 
