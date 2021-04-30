@@ -35,10 +35,12 @@ class ChatGateway extends Gateway {
 
     await setActive(this.user.objectId, changes)
 
-    this.client.broadcast.to(chatIds).emit(e.USER_ACTIVE, {
-      _id: this.user.objectId,
-      ...changes,
-    })
+    this.client.broadcast.to(chatIds)
+      .except(this.user.objectId)
+      .emit(e.USER_ACTIVE, {
+        _id: this.user.objectId,
+        ...changes,
+      })
   }
 
   async setViewed(chatId) {
