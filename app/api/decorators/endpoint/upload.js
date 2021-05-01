@@ -39,7 +39,7 @@ export function UploadImagePipe({ directory, name } = {}) {
       const pathToDir = e.PATH_TO_STATIC + folder
       const fileName = `${name || uuidV4()}.${this.request.queryParams.type}`
 
-      await saveImage(this._req, {
+      await saveImage(this.req, {
         fileName, pathToDir,
         ...this.request.queryParams,
       })
