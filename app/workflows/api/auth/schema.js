@@ -1,8 +1,6 @@
-import Validator, { and } from '../../../errors/validation'
-
-const { required, string } = Validator
+import { string, and } from 'schema-validator'
 
 export const AuthSchema = {
-  email   : and([required, string.minLength(10), string.maxLength(250)]),
-  password: and([required, string.minLength(6)]),
+  email   : and([string.minLength(10), string.maxLength(250)]),
+  password: and([string.minLength(6)]),
 }

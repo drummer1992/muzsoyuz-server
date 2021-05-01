@@ -1,7 +1,5 @@
-import Validator, { and, or } from '../../../../errors/validation'
+import { and, or, boolean, string, number, date, array, oneOf, optional, object } from 'schema-validator'
 import { JobType, Role } from '../../../../constants/user'
-
-const { number, oneOf, required, string, date, boolean, array, object } = Validator
 
 const ROLES = Object.values(Role)
 const JOB_TYPES = Object.values(JobType)
@@ -26,25 +24,25 @@ const AVAILABLE_SORT_VALUES = ['ASC', 'DESC'].map(direction => (
 )).flat(Infinity)
 
 const DefaultOfferSchema = {
-  isActive : boolean,
-  extraInfo: string,
-  salary   : number,
-  date     : date.future,
-  address  : string.maxLength(250),
-  phone    : string.maxLength(30),
-  jobType  : oneOf(JOB_TYPES),
-  role     : oneOf(ROLES),
-  sets     : oneOf(SETS),
-  title    : and([string, string.maxLength(100)]),
+  isActive : optional(boolean),
+  extraInfo: optional(string),
+  salary   : optional(number),
+  date     : optional(date.future),
+  address  : optional(string.maxLength(250)),
+  phone    : optional(string.maxLength(30)),
+  jobType  : optional(oneOf(JOB_TYPES)),
+  role     : optional(oneOf(ROLES)),
+  sets     : optional(oneOf(SETS)),
+  title    : optional(and([string, string.maxLength(100)])),
 }
 
 export const CreateOfferSchema = {
   ...DefaultOfferSchema,
-  salary : and([required, number]),
-  sets   : and([required, oneOf(SETS)]),
-  jobType: and([required, oneOf(JOB_TYPES)]),
-  role   : and([required, oneOf(ROLES)]),
-  title  : and([required, string, string.maxLength(100)]),
+  salary : number,
+  sets   : oneOf(SETS),
+  jobType: oneOf(JOB_TYPES),
+  role   : oneOf(ROLES),
+  title  : and([string, string.maxLength(100)]),
 }
 
 export const UpdateOfferSchema = {
@@ -54,16 +52,16 @@ export const UpdateOfferSchema = {
 const valueOrArrayOfValues = (values, message) => or([oneOf(values), array.of(oneOf(values))], message)
 
 export const FindOffersSchema = {
-  where  : object.schema({
-    role    : valueOrArrayOfValues(ROLES, 'role should be valid role or array of roles'),
-    jobType : valueOrArrayOfValues(JOB_TYPES, 'jobType should be valid jobType or array of jobTypes'),
-    sets    : and([number, oneOf(SETS)]),
-    salary  : object.softRange,
-    date    : object.softRange,
-    isActive: boolean,
-  }),
-  limit  : number,
-  offset : number,
-  props  : array.of(oneOf(AVAILABLE_PROPS)),
-  orderBy: oneOf(AVAILABLE_SORT_VALUES),
+  where  : optional(object.schema({
+    role    : optional(valueOrArrayOfValues(ROLES, 'role should be valid role or array of roles')),
+    jobType : optional(valueOrArrayOfValues(JOB_TYPES, 'jobType should be valid jobType or array of jobTypes')),
+    sets    : optional(and([number, oneOf(SETS)])),
+    salary  : optional(object.softRange),
+    date    : optional(object.softRange),
+    isActive: optional(boolean),
+  })),
+  limit  : optional(number),
+  offset : optional(number),
+  props  : optional(array.of(oneOf(AVAILABLE_PROPS))),
+  orderBy: optional(oneOf(AVAILABLE_SORT_VALUES)),
 }

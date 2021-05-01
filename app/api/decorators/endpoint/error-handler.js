@@ -1,4 +1,4 @@
-import errorHandlerDecorator from '../../../../utils/decorators/error-handler'
+import errorHandlerDecorator from '../../../utils/decorators/error-handler'
 
 export function ErrorHandler(instance, serviceName, descriptor) {
   const method = descriptor.value

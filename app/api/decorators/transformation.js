@@ -1,4 +1,4 @@
-import { TransformationPipe } from '../../../utils/decorators/transformation-pipe'
+import { TransformationPipe } from '../../utils/decorators/transformation-pipe'
 
 export function BodyTransformationPipe(schema, options = {}) {
   return TransformationPipe(schema, {

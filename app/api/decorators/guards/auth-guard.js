@@ -1,4 +1,4 @@
-import { verify } from '../../../../utils/http/jwt'
+import { verify } from '../../../utils/http/jwt'
 
 const PREFIX = 'Bearer '
 

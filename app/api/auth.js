@@ -1,13 +1,11 @@
 import Context from './context'
-import { Service } from './context/decorators/service'
-import { Get, Post } from './context/decorators/endpoint'
-import { AuthGuard } from './context/decorators/guards/auth-guard'
+import { AuthGuard } from './decorators/guards/auth-guard'
 import signUp from '../workflows/api/auth/sign-up'
 import signIn from '../workflows/api/auth/sign-in'
-import { StatusCode as c } from '../constants/http'
-import { StatusCode } from './context/decorators/status-code'
 import { AuthSchema } from '../workflows/api/auth/schema'
-import { BodyValidationPipe } from './context/decorators/validation'
+import { BodyValidationPipe } from './decorators/validation'
+import { Service, StatusCode, Post, Get } from 'decorated-routing/decorators'
+import c from 'decorated-routing/codes'
 
 @Service('/auth')
 export default class AuthService extends Context {

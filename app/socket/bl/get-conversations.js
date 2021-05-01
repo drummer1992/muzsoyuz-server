@@ -1,4 +1,4 @@
-import { isEqualObjectIds } from '../../db/utils'
+import { isEqualObjectIds } from '../../utils/mongoose'
 
 const getChatByUserMap = (chats, userId) => {
   const pickParticipantId = ({ participants }) => (

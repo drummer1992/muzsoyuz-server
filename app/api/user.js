@@ -1,17 +1,23 @@
 import Context from './context'
-import { Service } from './context/decorators/service'
-import { AuthGuard } from './context/decorators/guards/auth-guard'
-import { Delete, Get, Post, Put } from './context/decorators/endpoint'
+import { AuthGuard } from './decorators/guards/auth-guard'
 import updateProfile from '../workflows/api/user/profile/update'
 import createOffer from '../workflows/api/user/offers/create'
 import updateOffer from '../workflows/api/user/offers/update'
-import { StatusCode as c } from '../constants/http'
-import { StatusCode } from './context/decorators/status-code'
+import c from 'decorated-routing/codes'
+import findOffers from '../workflows/api/user/offers/find'
+import deleteOffer from '../workflows/api/user/offers/delete'
+import createDayOff from '../workflows/api/user/day-off/create'
+import deleteDayOff from '../workflows/api/user/day-off/delete'
+import getDaysOff from '../workflows/api/user/day-off/get'
+import { UploadImagePipe } from './decorators/endpoint/upload'
+import updateImageURL from '../workflows/user/profile/update-image-url'
+import { QueryParamsTransformationPipe } from './decorators/transformation'
+import { Service, StatusCode, Delete, Get, Post, Put } from 'decorated-routing/decorators'
 import {
   BodyValidationPipe,
   PathParamsValidationPipe,
   QueryParamsValidationPipe,
-} from './context/decorators/validation'
+} from './decorators/validation'
 import { CreateOfferSchema, FindOffersSchema, UpdateOfferSchema } from '../workflows/api/user/offers/schema'
 import { CreateDayOffSchema, DeleteDayOffSchema } from '../workflows/api/user/day-off/schema'
 import {
@@ -19,14 +25,6 @@ import {
   UploadImageSchema,
   UploadImageTransformationSchema,
 } from '../workflows/api/user/profile/schema'
-import findOffers from '../workflows/api/user/offers/find'
-import deleteOffer from '../workflows/api/user/offers/delete'
-import createDayOff from '../workflows/api/user/day-off/create'
-import deleteDayOff from '../workflows/api/user/day-off/delete'
-import getDaysOff from '../workflows/api/user/day-off/get'
-import { UploadImagePipe } from './context/decorators/endpoint/upload'
-import updateImageURL from '../workflows/user/profile/update-image-url'
-import { QueryParamsTransformationPipe } from './context/decorators/transformation'
 
 @Service('/user')
 export default class UserService extends Context {

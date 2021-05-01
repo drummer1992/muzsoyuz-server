@@ -1,4 +1,4 @@
-import { StatusCode as c } from '../constants/http'
+import c from 'decorated-routing/codes'
 
 export class APIError extends Error {
   constructor(message, statusCode) {

@@ -1,5 +1,5 @@
 import { argumentsAssert, notFoundAssert } from '../../errors'
-import { isEqualObjectIds } from '../../db/utils'
+import { isEqualObjectIds } from '../../utils/mongoose'
 
 export default async (userId, chatId) => {
   argumentsAssert(chatId, 'Chat identifier is required')

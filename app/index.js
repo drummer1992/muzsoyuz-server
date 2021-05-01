@@ -1,16 +1,21 @@
 import http from 'http'
 import { ENV } from './config'
-import main from './main'
 import bootstrap from './bootstrap'
 import initSocket from './socket'
-import { withCors } from './utils/http/cors'
+import { Routing } from 'decorated-routing'
+import path from 'path'
+import Service from './api/context'
 
 const onStart = () => console.log(`---Node.js Server started on port ${ENV.PORT}---`)
 
 async function init() {
   await bootstrap()
 
-  const server = http.createServer(withCors(main))
+  const routing = new Routing({ Service, corsEnabled: true })
+
+  const requestListener = await routing.init(path.resolve(__filename, '../api'))
+
+  const server = http.createServer(requestListener)
 
   initSocket(server)
 

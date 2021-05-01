@@ -1,6 +1,5 @@
 import Context from './context'
-import { Service } from './context/decorators/service'
-import { Get } from './context/decorators/endpoint'
+import { Service, Get } from 'decorated-routing/decorators'
 
 @Service('/meta')
 export default class MetaService extends Context {

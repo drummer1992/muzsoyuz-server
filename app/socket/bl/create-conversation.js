@@ -1,5 +1,5 @@
 import { notFoundAssert, argumentsAssert } from '../../errors'
-import { isEqualObjectIds, isObjectId } from '../../db/utils'
+import { isEqualObjectIds, isObjectId } from '../../utils/mongoose'
 
 export default async (userId, participantId) => {
   argumentsAssert(isObjectId(participantId), 'Participant identifier is not valid')

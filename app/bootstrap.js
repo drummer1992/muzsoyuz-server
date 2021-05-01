@@ -11,12 +11,6 @@ const getJsFilesInDir = async pathToDir => {
 
 const loadModules = modules => Promise.all(modules.map(path => import(path)))
 
-const initServices = async () => {
-  const services = await getJsFilesInDir('./api')
-
-  await loadModules(services)
-}
-
 const initModels = async () => {
   const models = await getJsFilesInDir('./models')
 
@@ -25,7 +19,6 @@ const initModels = async () => {
 
 const bootstrap = async () => {
   try {
-    await initServices()
     await initModels()
     await db.init()
   } catch (e) {

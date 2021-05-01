@@ -1,15 +1,20 @@
-import { validate } from '../../errors/validation'
+import { createValidator } from 'schema-validator'
+import { InvalidArgumentsError } from '../../errors'
 
 export function ValidationPipe(schema, options = {}) {
   const context = options?.context
 
-  const validateEntity = validate(schema, options)
+  const validate = createValidator(schema, context)
 
   return function(target, key, descriptor) {
     const method = descriptor.value
 
     descriptor.value = function(data = {}) {
-      validateEntity(context ? data[context] : data)
+      try {
+        validate(context ? data[context] : data)
+      } catch (e) {
+        throw new InvalidArgumentsError(e.message)
+      }
 
       return method.call(this, data)
     }

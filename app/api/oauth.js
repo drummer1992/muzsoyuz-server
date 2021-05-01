@@ -1,9 +1,7 @@
 import Context from './context'
-import { Service } from './context/decorators/service'
-import { Get } from './context/decorators/endpoint'
 import oAuth from '../workflows/api/oauth'
-import { StatusCode as c } from '../constants/http'
-import { StatusCode } from './context/decorators/status-code'
+import { Service, StatusCode, Get } from 'decorated-routing/decorators'
+import c from 'decorated-routing/codes'
 
 @Service('/oauth')
 export default class OAuthService extends Context {

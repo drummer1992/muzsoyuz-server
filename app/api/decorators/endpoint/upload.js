@@ -1,8 +1,8 @@
 import assert from 'assert'
-import { uploadFile } from '../../../../utils/http/upload'
-import { ENV as e } from '../../../../config'
-import { uuidV4 } from '../../../../utils/uuid'
-import { makeDirIfNotExists } from '../../../../utils/file-system'
+import { uploadFile } from '../../../utils/http/upload'
+import { ENV as e } from '../../../config'
+import { uuidV4 } from '../../../utils/uuid'
+import { makeDirIfNotExists } from '../../../utils/file-system'
 import sharp from 'sharp'
 
 const resolveDirectory = (directory, userId) => {

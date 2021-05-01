@@ -1,12 +1,10 @@
-import Validator, { and } from '../../errors/validation'
 import { notFoundAssert } from '../../errors'
-import { generateObjectId } from '../../db/utils'
-
-const { required, string, objectId } = Validator
+import { assertObjectIdIsValid as objectId, generateObjectId } from '../../utils/mongoose'
+import { string } from 'schema-validator'
 
 export const MessageValidationSchema = {
-  text  : and([required, string]),
-  chatId: and([required, objectId]),
+  text  : string,
+  chatId: objectId,
 }
 
 export default async (userId, payload) => {
