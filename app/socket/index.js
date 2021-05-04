@@ -2,6 +2,7 @@ import { Server } from 'socket.io'
 import gateway from './gateway'
 import { verify } from '../utils/http/jwt'
 import { setSocketUser } from './context'
+import { ENV } from '../config'
 
 const authMiddleware = (socket, next) => {
   let error
@@ -21,7 +22,7 @@ const initSocket = server => {
   const socket = new Server(server, {
     transports: ['polling', 'websocket'],
     cors      : { methods: ['GET', 'POST'] },
-    path      : '/api/v2/chat',
+    path      : `${ENV.API_PREFIX}/chat`,
   })
 
   socket.use(authMiddleware)
